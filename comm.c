@@ -164,6 +164,52 @@ comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value)
 }
 
 /**
+ * @brief 协议字节输入
+ * 
+ * @return comm_err 错误码
+ */
+comm_err comm_pushByte(comm_uint8 byte)
+{
+    if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
+    fifo_err err = fifo_pushByte(comm_cb.rx_bytefifo, byte);
+    if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
+    else
+    {
+        if(err == FIFO_ERROR_NOTSPACE) return COMM_ERR_FIFOFULL;
+        return COMM_ERR_UNKNOW;
+    }
+}
+
+/**
+ * @brief 协议字节流输入
+ * 
+ * @param buf 字节流地址
+ * @param len 字节流长度
+ * @return comm_err 错误码
+ */
+comm_err comm_pushBuf(comm_uint8 buf, comm_uint32 len)
+{
+    if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
+    fifo_err err = fifo_pushBuf(comm_cb.rx_bytefifo, buf, len);
+    if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
+    else
+    {
+        if(err == FIFO_ERROR_NOTSPACE) return COMM_ERR_FIFOFULL;
+        return COMM_ERR_UNKNOW;
+    }
+}
+
+/**
+ * @brief 协议运行处理
+ * 
+ * @return comm_err 错误码
+ */
+comm_err comm_handle(void)
+{
+
+}
+
+/**
  * @brief 计算crc8
  * 
  * @param data 数据指针

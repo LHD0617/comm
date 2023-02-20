@@ -49,5 +49,8 @@ typedef comm_int8           comm_err;
 /* @Function declarations */
 comm_err comm_start(void);
 comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value);
+comm_err comm_pushByte(comm_uint8 byte);
+comm_err comm_pushBuf(comm_uint8 buf, comm_uint32 len);
+comm_err comm_handle(void);
 
 #endif
