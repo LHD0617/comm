@@ -10,7 +10,10 @@
  */
 
 /* @include */
+#include <stdlib.h>
+#include <string.h>
 #include "comm.h"
+#include "fifo.h"
 
 /* @struct */
 #pragma pack(1) // 单字节对齐
@@ -21,7 +24,7 @@
  */
 typedef struct
 {
-    comm_uint8 type;        // 帧类型
+    comm_uint8 tag;         // 帧类型
     comm_uint16 len;        // 帧长度
     comm_int8* value;       // 帧数据
 }comm_tlv_t;
@@ -34,15 +37,39 @@ typedef struct
 typedef struct
 {
     comm_uint16 head;       // 起始标识
-    comm_uint8 hcrc;        // 帧校验
+    comm_uint8 hcrc;        // 帧头校验
     comm_uint8 dcrc;        // 数据校验
-    comm_uint16 sn;         // 帧流水编号
-    comm_uint16 len;        // 数据长度
+    comm_uint32 sn;         // 帧流水编号
+    comm_uint32 len;        // 数据长度
     comm_tlv_t* tlv;        // tlv结构体指针
 }comm_item_t;
 
+/**
+ * @brief 协议控制块结构体
+ * 
+ */
+typedef struct
+{
+    comm_uint8 state;       // 协议运行状态
+    fifo_cb* tx_fifo;       // 发送队列
+    fifo_cb* rx_fifo;       // 接收队列
+    fifo_cb* rx_bytefifo;   // 接收字节缓冲区
+    comm_uint16 tx_sn;      // 发送流水编号
+    comm_uint16 rx_sn;      // 接收流水编号
+}comm_cb_t;
+
 #pragma pack() // 恢复默认字节对齐
 
+/* @global */
+static comm_cb_t comm_cb =  // 协议控制块
+{
+    .state = COMM_STATE_STOP,
+    .tx_fifo = COMM_NULL,
+    .rx_fifo = COMM_NULL,
+    .rx_bytefifo = COMM_NULL,
+    .tx_sn = 0,
+    .rx_sn = 0
+};
 
 /**
  * @brief 查表法计算CRC值，按照多项式 X^8+X^2+X^1+1 生成
@@ -67,6 +94,74 @@ static const comm_uint8 _crc8Table[256] =
     0xAE, 0xA9, 0xA0, 0xA7, 0xB2, 0xB5, 0xBC, 0xBB, 0x96, 0x91, 0x98, 0x9F, 0x8A, 0x8D, 0x84, 0x83,
     0xDE, 0xD9, 0xD0, 0xD7, 0xC2, 0xC5, 0xCC, 0xCB, 0xE6, 0xE1, 0xE8, 0xEF, 0xFA, 0xFD, 0xF4, 0xF3
 };
+
+/* @Function declarations */
+static comm_uint8 _crc8(comm_uint8 *data, comm_uint32 len);
+
+/**
+ * @brief 启动串行通信协议
+ * 
+ * @return comm_err 错误码
+ */
+comm_err comm_start(void)
+{
+    if(comm_cb.state == COMM_STATE_INIT)
+    {
+        comm_cb.tx_fifo = fifo_create(COMM_TXFIFO_SIZE * sizeof(comm_item_t*));
+        if(!comm_cb.tx_fifo) return COMM_ERR_NOTSPACE;
+        comm_cb.rx_fifo = fifo_create(COMM_RXFIFO_SIZE * sizeof(comm_item_t*));
+        if(!comm_cb.rx_fifo) return COMM_ERR_NOTSPACE;
+        comm_cb.rx_bytefifo = fifo_create(COMM_RXBYTEFIFO_SIZE);
+        if(!comm_cb.rx_bytefifo) return COMM_ERR_NOTSPACE;
+        comm_cb.state = COMM_STATE_READY;
+        return COMM_ERR_SUCCESS;
+    }
+    return COMM_ERR_REPEAT;
+}
+
+/**
+ * @brief 发送数据
+ * 
+ * @param tag 标签
+ * @param len 长度
+ * @param value 数据
+ * @return comm_err 错误码
+ */
+comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value)
+{
+    if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
+    comm_uint8* dat = COMM_NULL;
+    if(len) dat = (comm_uint8*)malloc(len);
+    comm_tlv_t* tlv = (comm_tlv_t*)malloc(sizeof(comm_tlv_t));
+    comm_item_t* item = (comm_item_t*)malloc(sizeof(comm_item_t));
+    if(!(((len && dat) || (!len)) && tlv && item))
+    {
+        free(dat);
+        free(tlv);
+        free(item);
+        return COMM_ERR_NOTSPACE;
+    }
+    memcpy(dat, value, len);
+    tlv->tag = tag;
+    tlv->len = len;
+    tlv->value = dat;
+    item->tlv = tlv;
+    item->len = tlv->len + sizeof(tlv->tag) + sizeof(tlv->len);
+    item->sn = comm_cb.tx_sn++;
+    item->dcrc = _crc8(tlv, item->len);
+    item->hcrc = _crc8(&(item->dcrc), sizeof(item->dcrc) + sizeof(item->sn) + sizeof(item->len));
+    item->head = COMM_HEAD_DATA;
+    fifo_err err = fifo_pushBuf(comm_cb.tx_fifo, item, sizeof(item));
+    if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
+    else
+    {
+        free(dat);
+        free(tlv);
+        free(item);
+        if(err == FIFO_ERROR_NOTSPACE) return COMM_ERR_FIFOFULL;
+        return COMM_ERR_UNKNOW;
+    }
+}
 
 /**
  * @brief 计算crc8
