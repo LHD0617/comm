@@ -10,7 +10,6 @@
  */
 
 /* @include */
-#include <stdlib.h>
 #include <string.h>
 #include "comm.h"
 #include "fifo.h"
@@ -28,7 +27,6 @@ typedef struct
     comm_uint16 len;        // 帧长度
     comm_int8* value;       // 帧数据
 }comm_tlv_t;
-
 
 /**
  * @brief 数据帧结构体
@@ -56,6 +54,9 @@ typedef struct
     fifo_cb* rx_bytefifo;   // 接收字节缓冲区
     comm_uint16 tx_sn;      // 发送流水编号
     comm_uint16 rx_sn;      // 接收流水编号
+    comm_uint64 time;       // 时间戳
+    comm_item_t* tx_item;   // 当前发送帧指针
+    comm_item_t* rx_item;   // 当前接收帧指针
 }comm_cb_t;
 
 #pragma pack() // 恢复默认字节对齐
@@ -68,7 +69,10 @@ static comm_cb_t comm_cb =  // 协议控制块
     .rx_fifo = COMM_NULL,
     .rx_bytefifo = COMM_NULL,
     .tx_sn = 0,
-    .rx_sn = 0
+    .rx_sn = 0,
+    .time = 0,
+    .tx_item = COMM_NULL,
+    .rx_item = COMM_NULL,
 };
 
 /**
@@ -97,6 +101,7 @@ static const comm_uint8 _crc8Table[256] =
 
 /* @Function declarations */
 static comm_uint8 _crc8(comm_uint8 *data, comm_uint32 len);
+static comm_err _sendFrame(comm_item_t* item);
 
 /**
  * @brief 启动串行通信协议
@@ -130,15 +135,16 @@ comm_err comm_start(void)
 comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value)
 {
     if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
+    if(!(fifo_getAvailable(comm_cb.tx_fifo) >= sizeof(comm_item_t*))) return COMM_ERR_FIFOFULL;
     comm_uint8* dat = COMM_NULL;
-    if(len) dat = (comm_uint8*)malloc(len);
-    comm_tlv_t* tlv = (comm_tlv_t*)malloc(sizeof(comm_tlv_t));
-    comm_item_t* item = (comm_item_t*)malloc(sizeof(comm_item_t));
+    if(len) dat = (comm_uint8*)COMM_MALLOC(len);
+    comm_tlv_t* tlv = (comm_tlv_t*)COMM_MALLOC(sizeof(comm_tlv_t));
+    comm_item_t* item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t));
     if(!(((len && dat) || (!len)) && tlv && item))
     {
-        free(dat);
-        free(tlv);
-        free(item);
+        COMM_FREE(dat);
+        COMM_FREE(tlv);
+        COMM_FREE(item);
         return COMM_ERR_NOTSPACE;
     }
     memcpy(dat, value, len);
@@ -147,28 +153,96 @@ comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value)
     tlv->value = dat;
     item->tlv = tlv;
     item->len = tlv->len + sizeof(tlv->tag) + sizeof(tlv->len);
-    item->sn = comm_cb.tx_sn++;
+    item->sn = comm_cb.tx_sn;
     item->dcrc = _crc8(tlv, item->len);
     item->hcrc = _crc8(&(item->dcrc), sizeof(item->dcrc) + sizeof(item->sn) + sizeof(item->len));
     item->head = COMM_HEAD_DATA;
     fifo_err err = fifo_pushBuf(comm_cb.tx_fifo, item, sizeof(item));
     if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
-    else
+    COMM_FREE(dat);
+    COMM_FREE(tlv);
+    COMM_FREE(item);
+    return COMM_ERR_UNKNOW;
+}
+
+/**
+ * @brief 协议运行处理
+ * 
+ * @return comm_err 错误码
+ */
+comm_err comm_handle(void)
+{
+    if(!comm_cb.tx_item)
     {
-        free(dat);
-        free(tlv);
-        free(item);
-        if(err == FIFO_ERROR_NOTSPACE) return COMM_ERR_FIFOFULL;
-        return COMM_ERR_UNKNOW;
+        fifo_err err = fifo_popBuf(comm_cb.tx_fifo, comm_cb.tx_item, sizeof(comm_cb.tx_item));
+        if(err == FIFO_ERROR_SUCCESS)
+        {
+            _sendFrame(comm_cb.tx_item);
+        }
     }
 }
+
+/**
+ * @brief 发送数据帧
+ * 
+ * @param item 数据帧结构体
+ * @return comm_err 错误码
+ */
+static comm_err _sendFrame(comm_item_t* item)
+{
+#ifdef COMM_UESD_PUTBYTE
+    for(comm_uint32 i = 0; i < &(item->tlv) - item; i++)
+    {
+        comm_putByte(*((comm_uint8*)item + i));
+    }
+    for(comm_uint32 i = 0; i < item->len; i++)
+    {
+        comm_putByte(*((comm_uint8*)item->tlv + i));
+    }
+    for(comm_uint32 i = 0; i < item->tlv->len; i++)
+    {
+        comm_putByte(*((comm_uint8*)item->tlv->value + i));
+    }
+#endif
+#ifdef COMM_USED_PUTBUF
+    comm_putBuf((comm_uint8*)item, (comm_uint32)(&(item->tlv) - item));
+    comm_putBuf((comm_uint8*)(comm_uint8*)item->tlv, (comm_uint32)item->len);
+    comm_putBuf((comm_uint8*)item->tlv->value, (comm_uint32)item->tlv->len);
+#endif
+}
+
+/**
+ * @brief 协议字节输出
+ * 
+ * @return comm_err错误码
+ */
+#ifdef COMM_UESD_PUTBYTE
+__WEAK comm_err comm_putByte(comm_uint8 byte)
+{
+    /* 此函数为虚函数需要用户在使用时重新实现 */
+    return COMM_ERR_SUCCESS;
+}
+#endif
+
+/**
+ * @brief 协议字节流输出
+ * 
+ * @return comm_err错误码
+ */
+#ifdef COMM_USED_PUTBUF
+__WEAK comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len)
+{
+    /* 此函数为虚函数需要用户在使用时重新实现 */
+    return COMM_ERR_SUCCESS;
+}
+#endif
 
 /**
  * @brief 协议字节输入
  * 
  * @return comm_err 错误码
  */
-comm_err comm_pushByte(comm_uint8 byte)
+comm_err comm_getByte(comm_uint8 byte)
 {
     if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
     fifo_err err = fifo_pushByte(comm_cb.rx_bytefifo, byte);
@@ -187,7 +261,7 @@ comm_err comm_pushByte(comm_uint8 byte)
  * @param len 字节流长度
  * @return comm_err 错误码
  */
-comm_err comm_pushBuf(comm_uint8 buf, comm_uint32 len)
+comm_err comm_getBuf(comm_uint8* buf, comm_uint32 len)
 {
     if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
     fifo_err err = fifo_pushBuf(comm_cb.rx_bytefifo, buf, len);
@@ -200,13 +274,16 @@ comm_err comm_pushBuf(comm_uint8 buf, comm_uint32 len)
 }
 
 /**
- * @brief 协议运行处理
+ * @brief 协议心跳输入
  * 
+ * @param time 心跳时间 （单位：ms）
  * @return comm_err 错误码
  */
-comm_err comm_handle(void)
+comm_err comm_tick(comm_uint32 time)
 {
-
+    if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
+    comm_cb.time += time;
+    return COMM_ERR_SUCCESS;
 }
 
 /**

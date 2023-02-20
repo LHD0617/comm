@@ -12,6 +12,9 @@
 #ifndef __COMM_H_
 #define __COMM_H_
 
+/* @include */
+#include <stdlib.h>
+
 /* @typedef */
 typedef unsigned char       comm_uint8;
 typedef unsigned short int  comm_uint16;
@@ -26,7 +29,26 @@ typedef long long           comm_int64;
 typedef comm_int8           comm_err;
 
 /* @define */
-#define COMM_NULL                   0
+#ifdef __CC_ARM                             /* ARM Compiler */
+    #define __WEAK                          __weak
+#elif defined (__IAR_SYSTEMS_ICC__)         /* for IAR Compiler */
+    #define __WEAK                          __weak
+#elif defined (__GNUC__)                    /* GNU GCC Compiler */
+    #define __WEAK                          __attribute__((weak))
+#elif defined (__ADSPBLACKFIN__)            /* for VisualDSP++ Compiler */
+    #define __WEAK                          __attribute__((weak))
+#else
+    #error not supported tool chain
+#endif
+
+/* 这里选择数据输出方式，只能二选一否则将重复输出 */
+#define COMM_UESD_PUTBYTE                   // 数据以字节方式输出
+// #define COMM_USED_PUTBUF                    // 数据以字节流方式输出
+
+#define COMM_MALLOC                 malloc  // 空间申请接口
+#define COMM_FREE                   free    // 空间释放接口
+
+#define COMM_NULL                   0       // 空数据定义
 
 #define COMM_HEAD_DATA              0x5AA5  // 帧起始数据
 
@@ -49,8 +71,15 @@ typedef comm_int8           comm_err;
 /* @Function declarations */
 comm_err comm_start(void);
 comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value);
-comm_err comm_pushByte(comm_uint8 byte);
-comm_err comm_pushBuf(comm_uint8 buf, comm_uint32 len);
 comm_err comm_handle(void);
+#ifdef COMM_UESD_PUTBYTE
+comm_err comm_putByte(comm_uint8 byte);
+#endif
+#ifdef COMM_USED_PUTBUF
+comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len);
+#endif
+comm_err comm_getByte(comm_uint8 byte);
+comm_err comm_getBuf(comm_uint8* buf, comm_uint32 len);
+comm_err comm_tick(comm_uint32 time);
 
 #endif
