@@ -137,12 +137,12 @@ comm_err comm_send(comm_tlv_t tlv)
 {
     if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
     if(!(fifo_getAvailable(comm_cb.tx_fifo) >= sizeof(comm_item_t*))) return COMM_ERR_FIFOFULL;
-    comm_item_t* item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + sizeof(comm_tlv_t) + tlv.len);
+    comm_item_t* item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + sizeof(_comm_tlv_t) + tlv.len);
     if(!item) return COMM_ERR_NOTSPACE;
     memcpy(item->tlv->value, tlv.value, tlv.len);
     item->tlv->len = tlv.len;
     item->tlv->tag = tlv.tag;
-    item->len = tlv.len + sizeof(comm_tlv_t);
+    item->len = sizeof(_comm_tlv_t) + tlv.len;
     item->sn = comm_cb.tx_sn;
     item->dcrc = _crc8(&item->tlv, item->len);
     item->hcrc = _crc8(&item->dcrc, item->tlv - &item->dcrc);
@@ -178,9 +178,9 @@ void comm_handle(void)
     //     fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)&item, sizeof(comm_item_t));
     //     if(err == FIFO_ERROR_SUCCESS)
     //     {
-    //         if(item.head == COMM_HEAD_DATA && item.hcrc == _crc8(&item.dcrc, &item.tlv - &item.dcrc))
+    //         if(item.head == COMM_HEAD_DATA && item.hcrc == _crc8(&item.dcrc, item.tlv - &item.dcrc))
     //         {
-    //             comm_cb.rx_item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + item.tlv.len);
+    //             comm_cb.rx_item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + item.len);
     //             comm_cb.rx_len = 0;
     //         }
     //     }
