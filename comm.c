@@ -19,6 +19,7 @@
 
 /**
  * @brief tlv结构体
+ * 该3结构体定义为线性结构仅作为内部使用
  * 
  */
 typedef struct
@@ -26,7 +27,7 @@ typedef struct
     comm_uint8 tag;         // 帧类型
     comm_uint16 len;        // 帧长度
     comm_uint8 value[];     // 帧数据
-}comm_tlv_t;
+}_comm_tlv_t;
 
 /**
  * @brief 数据帧结构体
@@ -39,7 +40,7 @@ typedef struct
     comm_uint8 dcrc;        // 数据校验
     comm_uint32 sn;         // 帧流水编号
     comm_uint32 len;        // 数据长度
-    comm_tlv_t tlv;         // tlv结构体
+    _comm_tlv_t tlv[];      // tlv结构体
 }comm_item_t;
 
 /**
@@ -52,12 +53,12 @@ typedef struct
     fifo_cb* tx_fifo;       // 发送队列
     fifo_cb* rx_fifo;       // 接收队列
     fifo_cb* rx_bytefifo;   // 接收字节缓冲区
-    comm_uint16 tx_sn;      // 发送流水编号
-    comm_uint16 rx_sn;      // 接收流水编号
+    comm_uint32 tx_sn;      // 发送流水编号
     comm_uint64 time;       // 时间戳
     comm_item_t* tx_item;   // 当前发送帧指针
     comm_item_t* rx_item;   // 当前接收帧指针
     comm_uint8 repeat;      // 重发次数
+    comm_uint32 rx_len;     // 当前接收长度
 }comm_cb_t;
 
 #pragma pack() // 恢复默认字节对齐
@@ -70,11 +71,11 @@ static comm_cb_t comm_cb =  // 协议控制块
     .rx_fifo = COMM_NULL,
     .rx_bytefifo = COMM_NULL,
     .tx_sn = 0,
-    .rx_sn = 0,
     .time = 0,
     .tx_item = COMM_NULL,
     .rx_item = COMM_NULL,
     .repeat = 0,
+    .rx_len = 0,
 };
 
 /**
@@ -129,24 +130,22 @@ comm_err comm_start(void)
 /**
  * @brief 发送数据
  * 
- * @param tag 标签
- * @param len 长度
- * @param value 数据
- * @return comm_err 错误码
+ * @param tlv 数据tlv
+ * @return comm_err 
  */
-comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value)
+comm_err comm_send(comm_tlv_t tlv)
 {
     if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
     if(!(fifo_getAvailable(comm_cb.tx_fifo) >= sizeof(comm_item_t*))) return COMM_ERR_FIFOFULL;
-    comm_item_t* item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + len);
+    comm_item_t* item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + sizeof(comm_tlv_t) + tlv.len);
     if(!item) return COMM_ERR_NOTSPACE;
-    memcpy(item->tlv.value, value, len);
-    item->tlv.len = len;
-    item->tlv.tag = tag;
-    item->len = len + sizeof(comm_tlv_t);
+    memcpy(item->tlv->value, tlv.value, tlv.len);
+    item->tlv->len = tlv.len;
+    item->tlv->tag = tlv.tag;
+    item->len = tlv.len + sizeof(comm_tlv_t);
     item->sn = comm_cb.tx_sn;
     item->dcrc = _crc8(&item->tlv, item->len);
-    item->hcrc = _crc8(&(item->dcrc), &item->tlv - &item->dcrc);
+    item->hcrc = _crc8(&item->dcrc, item->tlv - &item->dcrc);
     item->head = COMM_HEAD_DATA;
     fifo_err err = fifo_pushBuf(comm_cb.tx_fifo, &item, sizeof(item));
     if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
@@ -157,10 +156,10 @@ comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value)
 /**
  * @brief 协议运行处理
  * 
- * @return comm_err 错误码
  */
-comm_err comm_handle(void)
+void comm_handle(void)
 {
+    /* 发送数据 */
     if(!comm_cb.tx_item)
     {
         fifo_err err = fifo_popBuf(comm_cb.tx_fifo, &comm_cb.tx_item, sizeof(comm_cb.tx_item));
@@ -172,6 +171,34 @@ comm_err comm_handle(void)
             comm_cb.tx_item = COMM_NULL;
         }
     }
+    /* 接收数据 */
+    // if(!comm_cb.rx_item)
+    // {
+    //     comm_item_t item;
+    //     fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)&item, sizeof(comm_item_t));
+    //     if(err == FIFO_ERROR_SUCCESS)
+    //     {
+    //         if(item.head == COMM_HEAD_DATA && item.hcrc == _crc8(&item.dcrc, &item.tlv - &item.dcrc))
+    //         {
+    //             comm_cb.rx_item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + item.tlv.len);
+    //             comm_cb.rx_len = 0;
+    //         }
+    //     }
+    // }
+    // else
+    // {
+    //     comm_uint32 len = fifo_getUsed(comm_cb.rx_bytefifo);
+    //     if(comm_cb.rx_len + len > comm_cb.rx_item->tlv.len) len = comm_cb.rx_item->tlv.len - comm_cb.rx_len;
+    //     fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)(comm_cb.rx_item->tlv.value + comm_cb.rx_len), len);
+    //     if(err == FIFO_ERROR_SUCCESS)
+    //     {
+    //         comm_cb.rx_len += len;
+    //     }
+    //     if(comm_cb.rx_len == comm_cb.rx_item->tlv.len)
+    //     {
+    //         if(comm_cb.rx_item->dcrc = _crc8(&comm_cb.rx_item->tlv, comm_cb.rx_item->len);)
+    //     }
+    // }
 }
 
 /**
@@ -181,7 +208,7 @@ comm_err comm_handle(void)
  */
 static comm_err _sendFrame(comm_item_t* item)
 {
-    if(comm_putBuf((comm_uint8*)item, sizeof(comm_item_t) + item->tlv.len) == COMM_ERR_SUCCESS)
+    if(comm_putBuf((comm_uint8*)item, sizeof(comm_item_t) + sizeof(_comm_tlv_t) + item->tlv->len) == COMM_ERR_SUCCESS)
         return COMM_ERR_SUCCESS;
     else
         return COMM_ERR_UNKNOW;

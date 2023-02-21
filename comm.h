@@ -44,7 +44,7 @@ typedef comm_int8           comm_err;
 #define COMM_MALLOC                 malloc  // 空间申请接口
 #define COMM_FREE                   free    // 空间释放接口
 
-#define COMM_NULL                   0       // 空数据定义
+#define COMM_NULL                   NULL    // 空数据定义
 
 #define COMM_HEAD_DATA              0x5AA5  // 帧起始数据
 
@@ -64,10 +64,23 @@ typedef comm_int8           comm_err;
 #define COMM_RXFIFO_SIZE            5       // 接收队列大小 （单位：sizeof(comm_item_t*)）
 #define COMM_RXBYTEFIFO_SIZE        256     // 接收字节缓冲区大小 （单位：字节）
 
+/* @struct */
+
+/**
+ * @brief tlv结构体
+ * 
+ */
+typedef struct
+{
+    comm_uint8 tag;         // 帧类型
+    comm_uint16 len;        // 帧长度
+    comm_uint8* value;      // 帧数据
+}comm_tlv_t;
+
 /* @Function declarations */
 comm_err comm_start(void);
-comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value);
-comm_err comm_handle(void);
+comm_err comm_send(comm_tlv_t tlv);
+void comm_handle(void);
 comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len);
 comm_err comm_getByte(comm_uint8 byte);
 comm_err comm_getBuf(comm_uint8* buf, comm_uint32 len);
