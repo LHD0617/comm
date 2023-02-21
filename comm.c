@@ -144,10 +144,10 @@ comm_err comm_send(comm_tlv_t tlv)
     item->tlv->tag = tlv.tag;
     item->len = sizeof(_comm_tlv_t) + tlv.len;
     item->sn = comm_cb.tx_sn;
-    item->dcrc = _crc8(&item->tlv, item->len);
-    item->hcrc = _crc8(&item->dcrc, item->tlv - &item->dcrc);
+    item->dcrc = _crc8((comm_uint8*)&item->tlv, item->len);
+    item->hcrc = _crc8(&item->dcrc, (comm_uint8*)item->tlv - &item->dcrc);
     item->head = COMM_HEAD_DATA;
-    fifo_err err = fifo_pushBuf(comm_cb.tx_fifo, &item, sizeof(item));
+    fifo_err err = fifo_pushBuf(comm_cb.tx_fifo, (comm_uint8*)&item, sizeof(item));
     if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
     COMM_FREE(item);
     return COMM_ERR_UNKNOW;
@@ -162,7 +162,7 @@ void comm_handle(void)
     /* 发送数据 */
     if(!comm_cb.tx_item)
     {
-        fifo_err err = fifo_popBuf(comm_cb.tx_fifo, &comm_cb.tx_item, sizeof(comm_cb.tx_item));
+        fifo_err err = fifo_popBuf(comm_cb.tx_fifo, (comm_uint8*)&comm_cb.tx_item, sizeof(comm_cb.tx_item));
         if(err == FIFO_ERROR_SUCCESS)
         {
             _sendFrame(comm_cb.tx_item);
@@ -178,7 +178,7 @@ void comm_handle(void)
         fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)&item, sizeof(comm_item_t));
         if(err == FIFO_ERROR_SUCCESS)
         {
-            if(item.head == COMM_HEAD_DATA && item.hcrc == _crc8(&item.dcrc, item.tlv - &item.dcrc))
+            if(item.head == COMM_HEAD_DATA && item.hcrc == _crc8(&item.dcrc, (comm_uint8*)item.tlv - &item.dcrc))
             {
                 comm_cb.rx_item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + item.len);
                 if(comm_cb.rx_item) *comm_cb.rx_item = item;
@@ -197,7 +197,7 @@ void comm_handle(void)
         }
         if(comm_cb.rx_len == comm_cb.rx_item->len)
         {
-            if(comm_cb.rx_item->dcrc = _crc8(comm_cb.rx_item->tlv, comm_cb.rx_item->len))
+            if(comm_cb.rx_item->dcrc == _crc8((comm_uint8*)comm_cb.rx_item->tlv, comm_cb.rx_item->len))
             {
                 /* 接收成功*/
             }
