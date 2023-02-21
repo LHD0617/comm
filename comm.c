@@ -25,7 +25,7 @@ typedef struct
 {
     comm_uint8 tag;         // 帧类型
     comm_uint16 len;        // 帧长度
-    comm_int8* value;       // 帧数据
+    comm_uint8* value;      // 帧数据
 }comm_tlv_t;
 
 /**
@@ -101,7 +101,7 @@ static const comm_uint8 _crc8Table[256] =
 
 /* @Function declarations */
 static comm_uint8 _crc8(comm_uint8 *data, comm_uint32 len);
-static comm_err _sendFrame(comm_item_t* item);
+static void _sendFrame(comm_item_t* item);
 
 /**
  * @brief 启动串行通信协议
@@ -178,6 +178,7 @@ comm_err comm_handle(void)
         if(err == FIFO_ERROR_SUCCESS)
         {
             _sendFrame(comm_cb.tx_item);
+            comm_cb.tx_sn++;
             COMM_FREE(comm_cb.tx_item->tlv->value);
             COMM_FREE(comm_cb.tx_item->tlv);
             COMM_FREE(comm_cb.tx_item);
@@ -190,24 +191,23 @@ comm_err comm_handle(void)
  * @brief 发送数据帧
  * 
  * @param item 数据帧结构体
- * @return comm_err 错误码
  */
-static comm_err _sendFrame(comm_item_t* item)
+static void _sendFrame(comm_item_t* item)
 {
-    comm_putBuf((comm_uint8*)item, (comm_uint32)(&(item->tlv) - item));
-    comm_putBuf((comm_uint8*)item->tlv, (comm_uint32)item->len);
-    comm_putBuf((comm_uint8*)item->tlv->value, (comm_uint32)item->tlv->len);
+    comm_putBuf((comm_uint8*)item, sizeof(*item) - sizeof(comm_tlv_t*));
+    comm_putBuf((comm_uint8*)(item->tlv), (comm_uint32)(item->len - item->tlv->len));
+    comm_putBuf((comm_uint8*)(item->tlv->value), (comm_uint32)item->tlv->len);
 }
 
 /**
  * @brief 协议字节流输出
  * 
- * @return comm_err错误码
+ * @param buf 数据地址
+ * @param len 数据长度
  */
-__WEAK comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len)
+__WEAK void comm_putBuf(comm_uint8* buf, comm_uint32 len)
 {
     /* 此函数为虚函数需要用户在使用时重新实现 */
-    return COMM_ERR_SUCCESS;
 }
 
 /**
