@@ -41,10 +41,6 @@ typedef comm_int8           comm_err;
     #error not supported tool chain
 #endif
 
-/* 这里选择数据输出方式，只能二选一否则将重复输出 */
-#define COMM_UESD_PUTBYTE                   // 数据以字节方式输出
-// #define COMM_USED_PUTBUF                    // 数据以字节流方式输出
-
 #define COMM_MALLOC                 malloc  // 空间申请接口
 #define COMM_FREE                   free    // 空间释放接口
 
@@ -72,12 +68,7 @@ typedef comm_int8           comm_err;
 comm_err comm_start(void);
 comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value);
 comm_err comm_handle(void);
-#ifdef COMM_UESD_PUTBYTE
-comm_err comm_putByte(comm_uint8 byte);
-#endif
-#ifdef COMM_USED_PUTBUF
 comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len);
-#endif
 comm_err comm_getByte(comm_uint8 byte);
 comm_err comm_getBuf(comm_uint8* buf, comm_uint32 len);
 comm_err comm_tick(comm_uint32 time);

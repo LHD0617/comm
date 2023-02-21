@@ -64,7 +64,7 @@ typedef struct
 /* @global */
 static comm_cb_t comm_cb =  // 协议控制块
 {
-    .state = COMM_STATE_STOP,
+    .state = COMM_STATE_INIT,
     .tx_fifo = COMM_NULL,
     .rx_fifo = COMM_NULL,
     .rx_bytefifo = COMM_NULL,
@@ -157,7 +157,7 @@ comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value)
     item->dcrc = _crc8(tlv, item->len);
     item->hcrc = _crc8(&(item->dcrc), sizeof(item->dcrc) + sizeof(item->sn) + sizeof(item->len));
     item->head = COMM_HEAD_DATA;
-    fifo_err err = fifo_pushBuf(comm_cb.tx_fifo, item, sizeof(item));
+    fifo_err err = fifo_pushBuf(comm_cb.tx_fifo, &item, sizeof(item));
     if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
     COMM_FREE(dat);
     COMM_FREE(tlv);
@@ -174,10 +174,14 @@ comm_err comm_handle(void)
 {
     if(!comm_cb.tx_item)
     {
-        fifo_err err = fifo_popBuf(comm_cb.tx_fifo, comm_cb.tx_item, sizeof(comm_cb.tx_item));
+        fifo_err err = fifo_popBuf(comm_cb.tx_fifo, &comm_cb.tx_item, sizeof(comm_cb.tx_item));
         if(err == FIFO_ERROR_SUCCESS)
         {
             _sendFrame(comm_cb.tx_item);
+            COMM_FREE(comm_cb.tx_item->tlv->value);
+            COMM_FREE(comm_cb.tx_item->tlv);
+            COMM_FREE(comm_cb.tx_item);
+            comm_cb.tx_item = COMM_NULL;
         }
     }
 }
@@ -190,52 +194,21 @@ comm_err comm_handle(void)
  */
 static comm_err _sendFrame(comm_item_t* item)
 {
-#ifdef COMM_UESD_PUTBYTE
-    for(comm_uint32 i = 0; i < &(item->tlv) - item; i++)
-    {
-        comm_putByte(*((comm_uint8*)item + i));
-    }
-    for(comm_uint32 i = 0; i < item->len; i++)
-    {
-        comm_putByte(*((comm_uint8*)item->tlv + i));
-    }
-    for(comm_uint32 i = 0; i < item->tlv->len; i++)
-    {
-        comm_putByte(*((comm_uint8*)item->tlv->value + i));
-    }
-#endif
-#ifdef COMM_USED_PUTBUF
     comm_putBuf((comm_uint8*)item, (comm_uint32)(&(item->tlv) - item));
-    comm_putBuf((comm_uint8*)(comm_uint8*)item->tlv, (comm_uint32)item->len);
+    comm_putBuf((comm_uint8*)item->tlv, (comm_uint32)item->len);
     comm_putBuf((comm_uint8*)item->tlv->value, (comm_uint32)item->tlv->len);
-#endif
 }
-
-/**
- * @brief 协议字节输出
- * 
- * @return comm_err错误码
- */
-#ifdef COMM_UESD_PUTBYTE
-__WEAK comm_err comm_putByte(comm_uint8 byte)
-{
-    /* 此函数为虚函数需要用户在使用时重新实现 */
-    return COMM_ERR_SUCCESS;
-}
-#endif
 
 /**
  * @brief 协议字节流输出
  * 
  * @return comm_err错误码
  */
-#ifdef COMM_USED_PUTBUF
 __WEAK comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len)
 {
     /* 此函数为虚函数需要用户在使用时重新实现 */
     return COMM_ERR_SUCCESS;
 }
-#endif
 
 /**
  * @brief 协议字节输入
