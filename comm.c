@@ -172,33 +172,39 @@ void comm_handle(void)
         }
     }
     /* 接收数据 */
-    // if(!comm_cb.rx_item)
-    // {
-    //     comm_item_t item;
-    //     fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)&item, sizeof(comm_item_t));
-    //     if(err == FIFO_ERROR_SUCCESS)
-    //     {
-    //         if(item.head == COMM_HEAD_DATA && item.hcrc == _crc8(&item.dcrc, item.tlv - &item.dcrc))
-    //         {
-    //             comm_cb.rx_item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + item.len);
-    //             comm_cb.rx_len = 0;
-    //         }
-    //     }
-    // }
-    // else
-    // {
-    //     comm_uint32 len = fifo_getUsed(comm_cb.rx_bytefifo);
-    //     if(comm_cb.rx_len + len > comm_cb.rx_item->tlv.len) len = comm_cb.rx_item->tlv.len - comm_cb.rx_len;
-    //     fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)(comm_cb.rx_item->tlv.value + comm_cb.rx_len), len);
-    //     if(err == FIFO_ERROR_SUCCESS)
-    //     {
-    //         comm_cb.rx_len += len;
-    //     }
-    //     if(comm_cb.rx_len == comm_cb.rx_item->tlv.len)
-    //     {
-    //         if(comm_cb.rx_item->dcrc = _crc8(&comm_cb.rx_item->tlv, comm_cb.rx_item->len);)
-    //     }
-    // }
+    if(!comm_cb.rx_item)
+    {
+        comm_item_t item;
+        fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)&item, sizeof(comm_item_t));
+        if(err == FIFO_ERROR_SUCCESS)
+        {
+            if(item.head == COMM_HEAD_DATA && item.hcrc == _crc8(&item.dcrc, item.tlv - &item.dcrc))
+            {
+                comm_cb.rx_item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + item.len);
+                if(comm_cb.rx_item) *comm_cb.rx_item = item;
+                comm_cb.rx_len = 0;
+            }
+        }
+    }
+    else
+    {
+        comm_uint32 len = fifo_getUsed(comm_cb.rx_bytefifo);
+        if(comm_cb.rx_len + len > comm_cb.rx_item->len) len = comm_cb.rx_item->len - comm_cb.rx_len;
+        fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)(comm_cb.rx_item->tlv + comm_cb.rx_len), len);
+        if(err == FIFO_ERROR_SUCCESS)
+        {
+            comm_cb.rx_len += len;
+        }
+        if(comm_cb.rx_len == comm_cb.rx_item->len)
+        {
+            if(comm_cb.rx_item->dcrc = _crc8(comm_cb.rx_item->tlv, comm_cb.rx_item->len))
+            {
+                /* 接收成功*/
+            }
+            COMM_FREE(comm_cb.rx_item);
+            comm_cb.rx_item = COMM_NULL;
+        }
+    }
 }
 
 /**
