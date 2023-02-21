@@ -184,6 +184,10 @@ void comm_handle(void)
                 if(comm_cb.rx_item) *comm_cb.rx_item = item;
                 comm_cb.rx_len = 0;
             }
+            else
+            {
+                fifo_clean(comm_cb.rx_bytefifo);
+            }
         }
     }
     else
