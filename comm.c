@@ -25,7 +25,7 @@ typedef struct
 {
     comm_uint8 tag;         // 帧类型
     comm_uint16 len;        // 帧长度
-    comm_uint8* value;      // 帧数据
+    comm_uint8 value[];     // 帧数据
 }comm_tlv_t;
 
 /**
@@ -39,7 +39,7 @@ typedef struct
     comm_uint8 dcrc;        // 数据校验
     comm_uint32 sn;         // 帧流水编号
     comm_uint32 len;        // 数据长度
-    comm_tlv_t* tlv;        // tlv结构体指针
+    comm_tlv_t tlv;         // tlv结构体
 }comm_item_t;
 
 /**
@@ -136,31 +136,18 @@ comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value)
 {
     if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
     if(!(fifo_getAvailable(comm_cb.tx_fifo) >= sizeof(comm_item_t*))) return COMM_ERR_FIFOFULL;
-    comm_uint8* dat = COMM_NULL;
-    if(len) dat = (comm_uint8*)COMM_MALLOC(len);
-    comm_tlv_t* tlv = (comm_tlv_t*)COMM_MALLOC(sizeof(comm_tlv_t));
-    comm_item_t* item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t));
-    if(!(((len && dat) || (!len)) && tlv && item))
-    {
-        COMM_FREE(dat);
-        COMM_FREE(tlv);
-        COMM_FREE(item);
-        return COMM_ERR_NOTSPACE;
-    }
-    memcpy(dat, value, len);
-    tlv->tag = tag;
-    tlv->len = len;
-    tlv->value = dat;
-    item->tlv = tlv;
-    item->len = tlv->len + sizeof(tlv->tag) + sizeof(tlv->len);
+    comm_item_t* item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + len);
+    if(!item) return COMM_ERR_NOTSPACE;
+    memcpy(item->tlv.value, value, len);
+    item->tlv.len = len;
+    item->tlv.tag = tag;
+    item->len = len + sizeof(comm_tlv_t);
     item->sn = comm_cb.tx_sn;
-    item->dcrc = _crc8(tlv, item->len);
-    item->hcrc = _crc8(&(item->dcrc), sizeof(item->dcrc) + sizeof(item->sn) + sizeof(item->len));
+    item->dcrc = _crc8(&item->tlv, item->len);
+    item->hcrc = _crc8(&(item->dcrc), &item->tlv - &item->dcrc);
     item->head = COMM_HEAD_DATA;
     fifo_err err = fifo_pushBuf(comm_cb.tx_fifo, &item, sizeof(item));
     if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
-    COMM_FREE(dat);
-    COMM_FREE(tlv);
     COMM_FREE(item);
     return COMM_ERR_UNKNOW;
 }
@@ -179,8 +166,6 @@ comm_err comm_handle(void)
         {
             _sendFrame(comm_cb.tx_item);
             comm_cb.tx_sn++;
-            COMM_FREE(comm_cb.tx_item->tlv->value);
-            COMM_FREE(comm_cb.tx_item->tlv);
             COMM_FREE(comm_cb.tx_item);
             comm_cb.tx_item = COMM_NULL;
         }
@@ -194,9 +179,7 @@ comm_err comm_handle(void)
  */
 static void _sendFrame(comm_item_t* item)
 {
-    comm_putBuf((comm_uint8*)item, sizeof(*item) - sizeof(comm_tlv_t*));
-    comm_putBuf((comm_uint8*)(item->tlv), (comm_uint32)(item->len - item->tlv->len));
-    comm_putBuf((comm_uint8*)(item->tlv->value), (comm_uint32)item->tlv->len);
+    comm_putBuf((comm_uint8*)item, sizeof(comm_item_t) + item->tlv.len);
 }
 
 /**
