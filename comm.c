@@ -57,6 +57,7 @@ typedef struct
     comm_uint64 time;       // 时间戳
     comm_item_t* tx_item;   // 当前发送帧指针
     comm_item_t* rx_item;   // 当前接收帧指针
+    comm_uint8 repeat;      // 重发次数
 }comm_cb_t;
 
 #pragma pack() // 恢复默认字节对齐
@@ -73,6 +74,7 @@ static comm_cb_t comm_cb =  // 协议控制块
     .time = 0,
     .tx_item = COMM_NULL,
     .rx_item = COMM_NULL,
+    .repeat = 0,
 };
 
 /**
@@ -101,7 +103,7 @@ static const comm_uint8 _crc8Table[256] =
 
 /* @Function declarations */
 static comm_uint8 _crc8(comm_uint8 *data, comm_uint32 len);
-static void _sendFrame(comm_item_t* item);
+static comm_err _sendFrame(comm_item_t* item);
 
 /**
  * @brief 启动串行通信协议
@@ -177,9 +179,12 @@ comm_err comm_handle(void)
  * 
  * @param item 数据帧结构体
  */
-static void _sendFrame(comm_item_t* item)
+static comm_err _sendFrame(comm_item_t* item)
 {
-    comm_putBuf((comm_uint8*)item, sizeof(comm_item_t) + item->tlv.len);
+    if(comm_putBuf((comm_uint8*)item, sizeof(comm_item_t) + item->tlv.len) == COMM_ERR_SUCCESS)
+        return COMM_ERR_SUCCESS;
+    else
+        return COMM_ERR_UNKNOW;
 }
 
 /**
@@ -188,9 +193,10 @@ static void _sendFrame(comm_item_t* item)
  * @param buf 数据地址
  * @param len 数据长度
  */
-__WEAK void comm_putBuf(comm_uint8* buf, comm_uint32 len)
+__WEAK comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len)
 {
     /* 此函数为虚函数需要用户在使用时重新实现 */
+    return COMM_ERR_SUCCESS;
 }
 
 /**

@@ -68,7 +68,7 @@ typedef comm_int8           comm_err;
 comm_err comm_start(void);
 comm_err comm_send(comm_uint8 tag, comm_uint16 len, comm_uint8* value);
 comm_err comm_handle(void);
-void comm_putBuf(comm_uint8* buf, comm_uint32 len);
+comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len);
 comm_err comm_getByte(comm_uint8 byte);
 comm_err comm_getBuf(comm_uint8* buf, comm_uint32 len);
 comm_err comm_tick(comm_uint32 time);
