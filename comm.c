@@ -138,7 +138,8 @@ comm_err comm_start(void)
         if(!comm_cb.rx_bytefifo) goto NOTSPACE;
         comm_cb.callback_list = list_create(sizeof(comm_callback_t));
         if(!comm_cb.callback_list) goto NOTSPACE;
-        if(comm_register(COMM_TAG_ACK, _ACK_Callback)) goto NOTSPACE;
+        comm_callback_t callback = {.tag = COMM_TAG_ACK, .callback = _ACK_Callback};
+        if(list_append(comm_cb.callback_list, &callback)) goto NOTSPACE;
         comm_cb.state = COMM_STATE_READY;
         return COMM_ERR_SUCCESS;
     }
@@ -228,7 +229,17 @@ void comm_handle(void)
         {
             if(comm_cb.rx_item->dcrc == _crc8((comm_uint8*)comm_cb.rx_item->tlv, comm_cb.rx_item->len))
             {
-                /* 接收成功*/
+                comm_callback_t callback;
+                for(comm_uint32 i = 0; i < list_count(comm_cb.callback_list); i++)
+                {
+                    if(!list_query(comm_cb.callback_list, i, &callback))
+                    {
+                        if(callback.tag == comm_cb.rx_item->tlv->tag)
+                        {
+                            callback.callback(comm_cb.rx_item->tlv->len, comm_cb.rx_item->tlv->value);
+                        }
+                    }
+                }
             }
             COMM_FREE(comm_cb.rx_item);
             comm_cb.rx_item = COMM_NULL;
