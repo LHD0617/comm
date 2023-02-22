@@ -67,6 +67,8 @@ typedef struct
     fifo_cb_t* rx_bytefifo;         // 接收字节缓冲区
     comm_uint32 tx_sn;              // 发送流水编号
     comm_uint64 time;               // 时间戳
+    comm_uint64 tx_time;            // 发送时间戳
+    comm_uint64 rx_time;            // 接收时间戳
     comm_item_t* tx_item;           // 当前发送帧指针
     comm_item_t* rx_item;           // 当前接收帧指针
     comm_uint8 repeat;              // 重发次数
@@ -85,6 +87,8 @@ static comm_cb_t comm_cb =  // 协议控制块
     .rx_bytefifo = COMM_NULL,
     .tx_sn = 0,
     .time = 0,
+    .tx_time = 0,
+    .rx_time = 0,
     .tx_item = COMM_NULL,
     .rx_item = COMM_NULL,
     .repeat = 0,
@@ -192,9 +196,26 @@ void comm_handle(void)
         if(err == FIFO_ERROR_SUCCESS)
         {
             _sendFrame(comm_cb.tx_item);
+            comm_cb.tx_time = comm_cb.time;
+            comm_cb.repeat = 1;
+        }
+    }
+    else
+    {
+        if(comm_cb.repeat >= COMM_TX_REPEAT)
+        {
             comm_cb.tx_sn++;
             COMM_FREE(comm_cb.tx_item);
             comm_cb.tx_item = COMM_NULL;
+        }
+        else
+        {
+            if(comm_cb.time - comm_cb.tx_time >= COMM_TX_TIMEOUT)
+            {
+                _sendFrame(comm_cb.tx_item);
+                comm_cb.tx_time = comm_cb.time;
+                comm_cb.repeat++;
+            }
         }
     }
     /* 接收数据 */
@@ -237,6 +258,7 @@ void comm_handle(void)
                         if(callback.tag == comm_cb.rx_item->tlv->tag)
                         {
                             callback.callback(comm_cb.rx_item->tlv->len, comm_cb.rx_item->tlv->value);
+                            break;
                         }
                     }
                 }
@@ -364,12 +386,18 @@ comm_err comm_register(comm_uint8 tag, void (*callback)(comm_uint16 len, comm_ui
 }
 
 /**
- * @brief 相应帧回调函数
+ * @brief 响应帧回调函数
  * 
  * @param len 数据长度
  * @param value 数据地址
  */
 static void _ACK_Callback(comm_uint16 len, comm_uint8* value)
 {
-
+    if(len != sizeof(comm_cb.tx_sn)) return;
+    if(*(comm_uint32*)value == comm_cb.tx_sn)
+    {
+        comm_cb.tx_sn++;
+        COMM_FREE(comm_cb.tx_item);
+        comm_cb.tx_item = COMM_NULL;
+    }
 }

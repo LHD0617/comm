@@ -64,6 +64,11 @@ typedef comm_int8           comm_err;
 #define COMM_RXFIFO_SIZE            5       // 接收队列大小 （单位：sizeof(comm_item_t*)）
 #define COMM_RXBYTEFIFO_SIZE        256     // 接收字节缓冲区大小 （单位：字节）
 
+#define COMM_TX_TIMEOUT             100     // 发送超时时间
+#define COMM_RX_TIMEOUT             100     // 接收超时时间
+
+#define COMM_TX_REPEAT              5       // 最大发送次数
+
 #define COMM_TAG_ACK                0       // 响应帧
 #define COMM_TAG_REQUEST            1       // 请求帧
 #define COMM_TAG_JOIN               2       // 加入帧
