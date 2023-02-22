@@ -74,6 +74,10 @@ typedef comm_int8           comm_err;
 #define COMM_TAG_JOIN               2       // 加入帧
 #define COMM_TAG_HB                 3       // 心跳帧
 
+#define COMM_ACK_ERR_SUCCESS        0       // 成功应答
+#define COMM_ACK_ERR_CRC            1       // CRC校验错误应答
+#define COMM_ACK_ERR_TIMEOUT        2       // 接收超时应答
+
 /* @struct */
 
 /**

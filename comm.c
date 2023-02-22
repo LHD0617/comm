@@ -54,6 +54,15 @@ typedef struct
     void (*callback)(comm_uint16 len, comm_uint8* value);
 }comm_callback_t;
 
+/**
+ * @brief ACK帧数据结构体
+ * 
+ */
+typedef struct
+{
+    comm_uint32 sn;
+    comm_uint8 err;
+}_ack_t;
 
 /**
  * @brief 协议控制块结构体
@@ -202,18 +211,15 @@ void comm_handle(void)
     }
     else
     {
-        if(comm_cb.repeat >= COMM_TX_REPEAT)
+        if(comm_cb.time - comm_cb.tx_time >= COMM_TX_TIMEOUT)
         {
-            COMM_FREE(comm_cb.tx_item);
-            comm_cb.tx_item = COMM_NULL;
-        }
-        else
-        {
-            if(comm_cb.time - comm_cb.tx_time >= COMM_TX_TIMEOUT)
+            _sendFrame(comm_cb.tx_item);
+            comm_cb.tx_time = comm_cb.time;
+            comm_cb.repeat++;
+            if(comm_cb.repeat >= COMM_TX_REPEAT)
             {
-                _sendFrame(comm_cb.tx_item);
-                comm_cb.tx_time = comm_cb.time;
-                comm_cb.repeat++;
+                COMM_FREE(comm_cb.tx_item);
+                comm_cb.tx_item = COMM_NULL;
             }
         }
     }
@@ -392,10 +398,45 @@ comm_err comm_register(comm_uint8 tag, void (*callback)(comm_uint16 len, comm_ui
  */
 static void _ACK_Callback(comm_uint16 len, comm_uint8* value)
 {
-    if(len != sizeof(comm_cb.tx_sn)) return;
-    if(*(comm_uint32*)value == comm_cb.tx_item->sn)
+    if(len != sizeof(_ack_t)) return;
+    _ack_t ack = *(_ack_t*)value;
+    if(ack.sn == comm_cb.tx_item->sn)
     {
-        COMM_FREE(comm_cb.tx_item);
-        comm_cb.tx_item = COMM_NULL;
+        switch(ack.err)
+        {
+            case COMM_ACK_ERR_SUCCESS:
+            {
+                COMM_FREE(comm_cb.tx_item);
+                comm_cb.tx_item = COMM_NULL;
+                break;
+            }
+            case COMM_ACK_ERR_CRC:
+            {
+                if(comm_cb.repeat >= COMM_TX_REPEAT)
+                {
+                    COMM_FREE(comm_cb.tx_item);
+                    comm_cb.tx_item = COMM_NULL;
+                }
+                else
+                {
+                    _sendFrame(comm_cb.tx_item);
+                    comm_cb.tx_time = comm_cb.time;
+                    comm_cb.repeat++;
+                }
+                break;
+            }
+            case COMM_ACK_ERR_TIMEOUT:
+            {
+                COMM_FREE(comm_cb.tx_item);
+                comm_cb.tx_item = COMM_NULL;
+                break;
+            }
+            default:
+            {
+                COMM_FREE(comm_cb.tx_item);
+                comm_cb.tx_item = COMM_NULL;
+                break;
+            }
+        }
     }
 }
