@@ -12,6 +12,10 @@
 #ifndef __COMM_H_
 #define __COMM_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* @include */
 #include <stdlib.h>
 
@@ -100,5 +104,9 @@ comm_err comm_getByte(comm_uint8 byte);
 comm_err comm_getBuf(comm_uint8* buf, comm_uint32 len);
 comm_err comm_tick(comm_uint32 time);
 comm_err comm_register(comm_uint8 tag, void (*callback)(comm_uint16 len, comm_uint8* value));
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
