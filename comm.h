@@ -51,7 +51,7 @@ typedef comm_int8           comm_err;
 #define COMM_ERR_UNKNOW             -1      // 未知错误
 #define COMM_ERR_SUCCESS            0       // 成功
 #define COMM_ERR_NOTSPACE           1       // 空间不足
-#define COMM_ERR_REPEAT             2       // 重复启动
+#define COMM_ERR_REPEAT             2       // 重复
 #define COMM_ERR_DATAERROR          3       // 数据错误
 #define COMM_ERR_NOTSTART           4       // 协议未启动
 #define COMM_ERR_FIFOFULL           5       // 队列已满
@@ -63,6 +63,11 @@ typedef comm_int8           comm_err;
 #define COMM_TXFIFO_SIZE            5       // 发送队列大小 （单位：sizeof(comm_item_t*)）
 #define COMM_RXFIFO_SIZE            5       // 接收队列大小 （单位：sizeof(comm_item_t*)）
 #define COMM_RXBYTEFIFO_SIZE        256     // 接收字节缓冲区大小 （单位：字节）
+
+#define COMM_TAG_ACK                0       // 响应帧
+#define COMM_TAG_REQUEST            1       // 请求帧
+#define COMM_TAG_JOIN               2       // 加入帧
+#define COMM_TAG_HB                 3       // 心跳帧
 
 /* @struct */
 
@@ -85,5 +90,6 @@ comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len);
 comm_err comm_getByte(comm_uint8 byte);
 comm_err comm_getBuf(comm_uint8* buf, comm_uint32 len);
 comm_err comm_tick(comm_uint32 time);
+comm_err comm_register(comm_uint8 tag, void (*callback)(comm_uint16 len, comm_uint8* value));
 
 #endif

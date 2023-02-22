@@ -13,6 +13,7 @@
 #include <string.h>
 #include "comm.h"
 #include "fifo.h"
+#include "list.h"
 
 /* @struct */
 #pragma pack(1) // 单字节对齐
@@ -70,6 +71,7 @@ typedef struct
     comm_item_t* rx_item;           // 当前接收帧指针
     comm_uint8 repeat;              // 重发次数
     comm_uint32 rx_len;             // 当前接收长度
+    list_cb_t* callback_list;       // 回调函数列表
 }comm_cb_t;
 
 #pragma pack() // 恢复默认字节对齐
@@ -87,6 +89,7 @@ static comm_cb_t comm_cb =  // 协议控制块
     .rx_item = COMM_NULL,
     .repeat = 0,
     .rx_len = 0,
+    .callback_list = COMM_NULL,
 };
 
 /**
@@ -116,6 +119,7 @@ static const comm_uint8 _crc8Table[256] =
 /* @Function declarations */
 static comm_uint8 _crc8(comm_uint8 *data, comm_uint32 len);
 static comm_err _sendFrame(comm_item_t* item);
+static void _ACK_Callback(comm_uint16 len, comm_uint8* value);
 
 /**
  * @brief 启动串行通信协议
@@ -127,15 +131,25 @@ comm_err comm_start(void)
     if(comm_cb.state == COMM_STATE_INIT)
     {
         comm_cb.tx_fifo = fifo_create(COMM_TXFIFO_SIZE * sizeof(comm_item_t*));
-        if(!comm_cb.tx_fifo) return COMM_ERR_NOTSPACE;
+        if(!comm_cb.tx_fifo) goto NOTSPACE;
         comm_cb.rx_fifo = fifo_create(COMM_RXFIFO_SIZE * sizeof(comm_item_t*));
-        if(!comm_cb.rx_fifo) return COMM_ERR_NOTSPACE;
+        if(!comm_cb.rx_fifo) goto NOTSPACE;
         comm_cb.rx_bytefifo = fifo_create(COMM_RXBYTEFIFO_SIZE);
-        if(!comm_cb.rx_bytefifo) return COMM_ERR_NOTSPACE;
+        if(!comm_cb.rx_bytefifo) goto NOTSPACE;
+        comm_cb.callback_list = list_create(sizeof(comm_callback_t));
+        if(!comm_cb.callback_list) goto NOTSPACE;
+        if(comm_register(COMM_TAG_ACK, _ACK_Callback)) goto NOTSPACE;
         comm_cb.state = COMM_STATE_READY;
         return COMM_ERR_SUCCESS;
     }
     return COMM_ERR_REPEAT;
+
+NOTSPACE:
+    fifo_delete(comm_cb.tx_fifo);
+    fifo_delete(comm_cb.rx_fifo);
+    fifo_delete(comm_cb.rx_bytefifo);
+    list_delete(comm_cb.callback_list);
+    return COMM_ERR_NOTSPACE;
 }
 
 /**
@@ -312,4 +326,39 @@ static comm_uint8 _crc8(comm_uint8 *data, comm_uint32 len)
         crc8 = _crc8Table[crc8];
     }
     return crc8;
+}
+
+/**
+ * @brief 注册回调函数
+ * 
+ * @param tag 数据标签
+ * @param callback 回调函数
+ * @return comm_err 错误码
+ */
+comm_err comm_register(comm_uint8 tag, void (*callback)(comm_uint16 len, comm_uint8* value))
+{
+    if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
+    comm_callback_t temp;
+    for(comm_uint32 i = 0; i < list_count(comm_cb.callback_list); i++)
+    {
+        if(list_query(comm_cb.callback_list, i, &temp)) return COMM_ERR_UNKNOW;
+        if(temp.tag == tag) return COMM_ERR_REPEAT;
+    }
+    temp.tag = tag;
+    temp.callback = callback;
+    list_err err = list_append(comm_cb.callback_list, &temp);
+    if(err == LIST_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
+    if(err == LIST_ERROR_NOTSPACE) return COMM_ERR_NOTSPACE;
+    return COMM_ERR_UNKNOW;
+}
+
+/**
+ * @brief 相应帧回调函数
+ * 
+ * @param len 数据长度
+ * @param value 数据地址
+ */
+static void _ACK_Callback(comm_uint16 len, comm_uint8* value)
+{
+
 }
