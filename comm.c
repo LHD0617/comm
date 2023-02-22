@@ -130,9 +130,10 @@ static const comm_uint8 _crc8Table[256] =
 };
 
 /* @Function declarations */
-static comm_uint8 _crc8(comm_uint8 *data, comm_uint32 len);
 static comm_err _sendFrame(comm_item_t* item);
-static void _ACK_Callback(comm_uint16 len, comm_uint8* value);
+static comm_err _sendAck(comm_uint32 sn, comm_uint8 err);
+static comm_uint8 _crc8(comm_uint8 *data, comm_uint32 len);
+static void _ackCallback(comm_uint16 len, comm_uint8* value);
 
 /**
  * @brief 启动串行通信协议
@@ -151,7 +152,7 @@ comm_err comm_start(void)
         if(!comm_cb.rx_bytefifo) goto NOTSPACE;
         comm_cb.callback_list = list_create(sizeof(comm_callback_t));
         if(!comm_cb.callback_list) goto NOTSPACE;
-        comm_callback_t callback = {.tag = COMM_TAG_ACK, .callback = _ACK_Callback};
+        comm_callback_t callback = {.tag = COMM_TAG_ACK, .callback = _ackCallback};
         if(list_append(comm_cb.callback_list, &callback)) goto NOTSPACE;
         comm_cb.state = COMM_STATE_READY;
         return COMM_ERR_SUCCESS;
@@ -235,6 +236,7 @@ void comm_handle(void)
                 comm_cb.rx_item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + item.len);
                 if(comm_cb.rx_item) *comm_cb.rx_item = item;
                 comm_cb.rx_len = 0;
+                comm_cb.rx_time = comm_cb.time;
             }
             else
             {
@@ -244,32 +246,49 @@ void comm_handle(void)
     }
     else
     {
-        comm_uint32 len = fifo_getUsed(comm_cb.rx_bytefifo);
-        if(comm_cb.rx_len + len > comm_cb.rx_item->len) len = comm_cb.rx_item->len - comm_cb.rx_len;
-        fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)(comm_cb.rx_item->tlv + comm_cb.rx_len), len);
-        if(err == FIFO_ERROR_SUCCESS)
+        if(comm_cb.time - comm_cb.rx_time >= COMM_RX_TIMEOUT)
         {
-            comm_cb.rx_len += len;
+            COMM_FREE(comm_cb.rx_item);
+            comm_cb.rx_item = COMM_NULL;
+            _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_TIMEOUT);
         }
-        if(comm_cb.rx_len == comm_cb.rx_item->len)
+        else
         {
-            if(comm_cb.rx_item->dcrc == _crc8((comm_uint8*)comm_cb.rx_item->tlv, comm_cb.rx_item->len))
+            comm_uint32 len = fifo_getUsed(comm_cb.rx_bytefifo);
+            if(comm_cb.rx_len + len > comm_cb.rx_item->len) len = comm_cb.rx_item->len - comm_cb.rx_len;
+            fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)(comm_cb.rx_item->tlv + comm_cb.rx_len), len);
+            if(err == FIFO_ERROR_SUCCESS)
             {
-                comm_callback_t callback;
-                for(comm_uint32 i = 0; i < list_count(comm_cb.callback_list); i++)
+                comm_cb.rx_len += len;
+            }
+            if(comm_cb.rx_len == comm_cb.rx_item->len)
+            {
+                if(comm_cb.rx_item->dcrc == _crc8((comm_uint8*)comm_cb.rx_item->tlv, comm_cb.rx_item->len))
                 {
-                    if(!list_query(comm_cb.callback_list, i, &callback))
+                    if(comm_cb.rx_item->tlv->tag != COMM_TAG_ACK)
                     {
-                        if(callback.tag == comm_cb.rx_item->tlv->tag)
+                        _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_SUCCESS);
+                    }
+                    comm_callback_t callback;
+                    for(comm_uint32 i = 0; i < list_count(comm_cb.callback_list); i++)
+                    {
+                        if(!list_query(comm_cb.callback_list, i, &callback))
                         {
-                            callback.callback(comm_cb.rx_item->tlv->len, comm_cb.rx_item->tlv->value);
-                            break;
+                            if(callback.tag == comm_cb.rx_item->tlv->tag)
+                            {
+                                callback.callback(comm_cb.rx_item->tlv->len, comm_cb.rx_item->tlv->value);
+                                break;
+                            }
                         }
                     }
                 }
+                else
+                {
+                    _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_CRC);
+                }
+                COMM_FREE(comm_cb.rx_item);
+                comm_cb.rx_item = COMM_NULL;
             }
-            COMM_FREE(comm_cb.rx_item);
-            comm_cb.rx_item = COMM_NULL;
         }
     }
 }
@@ -285,6 +304,32 @@ static comm_err _sendFrame(comm_item_t* item)
         return COMM_ERR_SUCCESS;
     else
         return COMM_ERR_UNKNOW;
+}
+
+/**
+ * @brief 发送响应帧
+ * 
+ * @param sn 帧流水编号
+ * @param err 错误码
+ * @return comm_err 错误码
+ */
+static comm_err _sendAck(comm_uint32 sn, comm_uint8 err)
+{
+    if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
+    _ack_t ack = {.sn = sn, .err = err};
+    comm_item_t* item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + sizeof(_comm_tlv_t) + sizeof(_ack_t));
+    if(!item) return COMM_ERR_NOTSPACE;
+    item->tlv->tag = COMM_TAG_ACK;
+    item->tlv->len = sizeof(_ack_t);
+    memcpy(item->tlv->value, &ack, item->tlv->len);
+    item->len = sizeof(_comm_tlv_t) + item->tlv->len;
+    item->sn = comm_cb.tx_sn++;
+    item->dcrc = _crc8((comm_uint8*)&item->tlv, item->len);
+    item->hcrc = _crc8(&item->dcrc, (comm_uint8*)item->tlv - &item->dcrc);
+    item->head = COMM_HEAD_DATA;
+    comm_err temp = _sendFrame(item);
+    COMM_FREE(item);
+    return temp;
 }
 
 /**
@@ -396,7 +441,7 @@ comm_err comm_register(comm_uint8 tag, void (*callback)(comm_uint16 len, comm_ui
  * @param len 数据长度
  * @param value 数据地址
  */
-static void _ACK_Callback(comm_uint16 len, comm_uint8* value)
+static void _ackCallback(comm_uint16 len, comm_uint8* value)
 {
     if(len != sizeof(_ack_t)) return;
     _ack_t ack = *(_ack_t*)value;
