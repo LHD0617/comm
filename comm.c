@@ -173,7 +173,7 @@ comm_err comm_send(comm_tlv_t tlv)
     item->tlv->len = tlv.len;
     item->tlv->tag = tlv.tag;
     item->len = sizeof(_comm_tlv_t) + tlv.len;
-    item->sn = comm_cb.tx_sn;
+    item->sn = comm_cb.tx_sn++;
     item->dcrc = _crc8((comm_uint8*)&item->tlv, item->len);
     item->hcrc = _crc8(&item->dcrc, (comm_uint8*)item->tlv - &item->dcrc);
     item->head = COMM_HEAD_DATA;
@@ -204,7 +204,6 @@ void comm_handle(void)
     {
         if(comm_cb.repeat >= COMM_TX_REPEAT)
         {
-            comm_cb.tx_sn++;
             COMM_FREE(comm_cb.tx_item);
             comm_cb.tx_item = COMM_NULL;
         }
@@ -394,9 +393,8 @@ comm_err comm_register(comm_uint8 tag, void (*callback)(comm_uint16 len, comm_ui
 static void _ACK_Callback(comm_uint16 len, comm_uint8* value)
 {
     if(len != sizeof(comm_cb.tx_sn)) return;
-    if(*(comm_uint32*)value == comm_cb.tx_sn)
+    if(*(comm_uint32*)value == comm_cb.tx_item->sn)
     {
-        comm_cb.tx_sn++;
         COMM_FREE(comm_cb.tx_item);
         comm_cb.tx_item = COMM_NULL;
     }
