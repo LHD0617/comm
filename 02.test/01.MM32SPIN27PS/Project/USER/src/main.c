@@ -74,9 +74,9 @@ int main(void)
         gpio_set(C1, 0);
         systick_delay_ms(100);
         gpio_set(C1, 1);
-        systick_delay_ms(100);
-//        comm_tlv_t tlv = {.tag = 0, .len = sizeof(count), .value = &count};
-//        comm_send(tlv);
+        systick_delay_ms(500);
+        comm_tlv_t tlv = {.tag = 4, .len = sizeof(count), .value = (uint8*)&count};
+        comm_send(tlv);
         count++;
     }
 }

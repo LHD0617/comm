@@ -15,12 +15,15 @@
 #include "../../../../01.comm/comm.h"
 #include <QIntValidator>
 
-MainWindow* thispt;
+static MainWindow* thispt;
 
 /* @Function declarations */
 static QString ByteArrayToHexString(QByteArray ascii);
 static char ConvertCharToHex(char ch);
 static QByteArray HexStringToQByteArray(QString str);
+static void tag4_callback(uint16_t len, uint8_t* value);
+static void tag5_callback(uint16_t len, uint8_t* value);
+static void tag6_callback(uint16_t len, uint8_t* value);
 
 /**
  * @brief Construct a new Main Window:: Main Window object
@@ -49,6 +52,9 @@ MainWindow::MainWindow(QWidget *parent)
     {
         tickTimer.start(1);
         handleTimer.start(20);
+        comm_register(4, tag4_callback);
+        comm_register(5, tag5_callback);
+        comm_register(6, tag6_callback);
         ShowMessage("协议启动成功");
     }
     else ShowMessage(QString("协议启动失败 错误码:%1").arg(err));
@@ -79,7 +85,20 @@ void MainWindow::sendFrame()
         }
         comm_tlv_t tlv;
         tlv.tag = ui->tagLedit->text().toInt();
-        QByteArray dat = ui->valueLedit->text().toLatin1();
+        QByteArray dat;
+        if(ui->hexCkbox->isChecked())
+        {
+            QString str = ui->valueLedit->text();
+            if(str.contains(" "))
+            {
+                str.replace(QString(" "),QString(""));
+            }
+            dat = HexStringToQByteArray(str);
+        }
+        else
+        {
+            dat = ui->valueLedit->text().toLatin1();
+        }
         tlv.len = dat.length();
         tlv.value = (comm_uint8*)dat.data();
         count++;
@@ -98,7 +117,8 @@ void MainWindow::sendFrame()
 void MainWindow::CleanData()
 {
     ui->commTedit->clear();
-    ui->dataTedit->clear();
+    ui->dataTxTedit->clear();
+    ui->dataRxTedit->clear();
 }
 
 /**
@@ -127,7 +147,7 @@ void MainWindow::ReceiveSerialData()
 {
     QByteArray dat = SerialReadData();
     comm_getBuf((comm_uint8*)dat.data(), dat.length());
-    ui->dataTedit->append("rx:" + ByteArrayToHexString(dat));
+    ui->dataRxTedit->append(ByteArrayToHexString(dat));
 }
 
 /**
@@ -140,12 +160,39 @@ comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len)
 {
     if(SerialGetPt()->isOpen())
     {
-        thispt->ui->dataTedit->append("tx:" + ByteArrayToHexString(QByteArray((char*)buf, len)));
+        thispt->ui->dataTxTedit->append(ByteArrayToHexString(QByteArray((char*)buf, len)));
         if(SerialGetPt()->write((char*)buf, len) != -1)
             return COMM_ERR_SUCCESS;
         else
             return COMM_ERR_UNKNOW;
     }
+}
+
+/**
+ * @brief tag4回调函数
+ *
+ */
+static void tag4_callback(uint16_t len, uint8_t* value)
+{
+    thispt->ui->commTedit->append("tag4:" + QString::number(*(uint32_t*)value));
+}
+
+/**
+ * @brief tag5回调函数
+ *
+ */
+static void tag5_callback(uint16_t len, uint8_t* value)
+{
+    thispt->ui->commTedit->append("tag5:" + QByteArray((char*)value, len));
+}
+
+/**
+ * @brief tag6回调函数
+ *
+ */
+static void tag6_callback(uint16_t len, uint8_t* value)
+{
+    thispt->ui->commTedit->append("tag6:" + QByteArray((char*)value, len));
 }
 
 /**
