@@ -20,6 +20,7 @@
 #include "headfile.h"
 #include "isr.h"
 #include "comm.h"
+#include "zf_gpio.h"
 
 void TIM1_BRK_UP_TRG_COM_IRQHandler (void)
 {
@@ -76,6 +77,7 @@ void UART1_IRQHandler(void)
 		uint8 dat;
 		uart_getchar(UART_1,&dat);
 		comm_getByte(dat);
+        gpio_toggle(C0);
 		UART1->ICR |= UART_ICR_RXICLR;												// ????§Ø???¦Ë
 	}
 }

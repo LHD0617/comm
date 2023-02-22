@@ -63,14 +63,17 @@ int main(void)
     board_init(true);
     uart_rx_irq(UART_1, 1);
     gpio_init(C0, GPO, 1, GPO_PUSH_PULL);
+    gpio_init(C1, GPO, 1, GPO_PUSH_PULL);
+    gpio_init(C2, GPO, 1, GPO_PUSH_PULL);
+    gpio_init(C3, GPO, 1, GPO_PUSH_PULL);
     comm_start();
     tim_interrupt_init_ms(TIM_1, 1, 0x00);
     tim_interrupt_init_ms(TIM_2, 5, 0x00);
     while(1)
     {
-        gpio_set(C0, 0);
+        gpio_set(C1, 0);
         systick_delay_ms(100);
-        gpio_set(C0, 1);
+        gpio_set(C1, 1);
         systick_delay_ms(100);
 //        comm_tlv_t tlv = {.tag = 0, .len = sizeof(count), .value = &count};
 //        comm_send(tlv);

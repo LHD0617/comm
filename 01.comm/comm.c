@@ -447,7 +447,7 @@ static void _ackCallback(comm_uint16 len, comm_uint8* value)
 {
     if(len != sizeof(_ack_t)) return;
     _ack_t ack = *(_ack_t*)value;
-    if(ack.sn == comm_cb.tx_item->sn)
+    if(comm_cb.tx_item && ack.sn == comm_cb.tx_item->sn)
     {
         switch(ack.err)
         {
