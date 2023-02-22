@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\MM32SPIN2PS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\MM32SPIN2PS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Feb 22 16:37:32 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Feb 22 16:56:54 2023
 <BR><P>
 <H3>Maximum Stack Usage =        132 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -65,7 +65,7 @@ Global Symbols
 <P><STRONG><a name="[25]"></a>__main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry.o(.ARM.Collect$$$$00000000))
 <BR>[Address Reference Count : 1]<UL><LI> startup_mm32spin2xx_p_keil.o(.text)
 </UL>
-<P><STRONG><a name="[63]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
+<P><STRONG><a name="[62]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
 
 <P><STRONG><a name="[27]"></a>_main_scatterload</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry5.o(.ARM.Collect$$$$00000004))
 <BR><BR>[Calls]<UL><LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
@@ -75,19 +75,19 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
 </UL>
 
-<P><STRONG><a name="[64]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
+<P><STRONG><a name="[63]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
 
-<P><STRONG><a name="[65]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
+<P><STRONG><a name="[64]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
 
-<P><STRONG><a name="[66]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
+<P><STRONG><a name="[65]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
 
 <P><STRONG><a name="[29]"></a>__rt_lib_shutdown_fini</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry12b.o(.ARM.Collect$$$$0000000E))
 <BR><BR>[Calls]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__arm_fini_ (Weak Reference)
 </UL>
 
-<P><STRONG><a name="[67]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000F))
+<P><STRONG><a name="[66]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000F))
 
-<P><STRONG><a name="[68]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$00000011))
+<P><STRONG><a name="[67]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$00000011))
 
 <P><STRONG><a name="[0]"></a>Reset_Handler</STRONG> (Thumb, 62 bytes, Stack size 0 bytes, startup_mm32spin2xx_p_keil.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_mm32spin2xx_p_keil.o(RESET)
@@ -145,65 +145,65 @@ Global Symbols
 <P><STRONG><a name="[6]"></a>WWDG_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_mm32spin2xx_p_keil.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_mm32spin2xx_p_keil.o(RESET)
 </UL>
-<P><STRONG><a name="[69]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 12 bytes, uidiv.o(.text), UNUSED)
+<P><STRONG><a name="[68]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 12 bytes, uidiv.o(.text), UNUSED)
 
 <P><STRONG><a name="[2c]"></a>__aeabi_uidivmod</STRONG> (Thumb, 44 bytes, Stack size 12 bytes, uidiv.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = __aeabi_uidivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
-<LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;systick_delay_ms
+<BR>[Called By]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
+<LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;systick_delay_ms
 <LI><a href="#[2e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AutoCalPllFactor
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetSysClockToXX
 <LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
 
-<P><STRONG><a name="[6a]"></a>__aeabi_idiv</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, idiv.o(.text), UNUSED)
+<P><STRONG><a name="[69]"></a>__aeabi_idiv</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, idiv.o(.text), UNUSED)
 
 <P><STRONG><a name="[2b]"></a>__aeabi_idivmod</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, idiv.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_pushByte
-<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_popBuf
-<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getUsed
-<LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getAvailable
+<BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_pushByte
+<LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_popBuf
+<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getUsed
+<LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getAvailable
 </UL>
 
-<P><STRONG><a name="[3d]"></a>__aeabi_memcpy</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, memcpya.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
+<P><STRONG><a name="[3c]"></a>__aeabi_memcpy</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, memcpya.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ackCallback
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_query
-<LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_append
+<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_query
+<LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_append
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[6b]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
+<P><STRONG><a name="[6a]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
 
-<P><STRONG><a name="[6c]"></a>__aeabi_memcpy8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
+<P><STRONG><a name="[6b]"></a>__aeabi_memcpy8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
 
-<P><STRONG><a name="[3e]"></a>__aeabi_uread4</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, uread4.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
+<P><STRONG><a name="[3d]"></a>__aeabi_uread4</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, uread4.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ackCallback
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_query
-<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_count
-<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_clean
-<LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_append
-<LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_pushByte
-<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_popBuf
-<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getUsed
-<LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getAvailable
-<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_clean
-<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
+<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_query
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_count
+<LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_clean
+<LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_append
+<LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_pushByte
+<LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_popBuf
+<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getUsed
+<LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getAvailable
+<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_clean
+<LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
-<LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_getByte
+<LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_getByte
 </UL>
 
-<P><STRONG><a name="[6d]"></a>__rt_uread4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uread4.o(.text), UNUSED)
+<P><STRONG><a name="[6c]"></a>__rt_uread4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uread4.o(.text), UNUSED)
 
-<P><STRONG><a name="[6e]"></a>_uread4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uread4.o(.text), UNUSED)
+<P><STRONG><a name="[6d]"></a>_uread4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uread4.o(.text), UNUSED)
 
-<P><STRONG><a name="[42]"></a>__aeabi_uread8</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, uread8.o(.text))
+<P><STRONG><a name="[41]"></a>__aeabi_uread8</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, uread8.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_uread8
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ackCallback
@@ -211,29 +211,29 @@ Global Symbols
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[6f]"></a>__rt_uread8</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, uread8.o(.text), UNUSED)
+<P><STRONG><a name="[6e]"></a>__rt_uread8</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, uread8.o(.text), UNUSED)
 
-<P><STRONG><a name="[70]"></a>_uread8</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, uread8.o(.text), UNUSED)
+<P><STRONG><a name="[6f]"></a>_uread8</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, uread8.o(.text), UNUSED)
 
-<P><STRONG><a name="[40]"></a>__aeabi_uwrite4</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, uwrite4.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
+<P><STRONG><a name="[3f]"></a>__aeabi_uwrite4</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, uwrite4.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ackCallback
-<LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_create
-<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_clean
-<LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_append
-<LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_pushByte
-<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_popBuf
-<LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_create
-<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_clean
-<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
+<LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_create
+<LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_clean
+<LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_append
+<LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_pushByte
+<LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_popBuf
+<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_create
+<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_clean
+<LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[71]"></a>__rt_uwrite4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uwrite4.o(.text), UNUSED)
+<P><STRONG><a name="[70]"></a>__rt_uwrite4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uwrite4.o(.text), UNUSED)
 
-<P><STRONG><a name="[72]"></a>_uwrite4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uwrite4.o(.text), UNUSED)
+<P><STRONG><a name="[71]"></a>_uwrite4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uwrite4.o(.text), UNUSED)
 
-<P><STRONG><a name="[43]"></a>__aeabi_uwrite8</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, uwrite8.o(.text))
+<P><STRONG><a name="[42]"></a>__aeabi_uwrite8</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, uwrite8.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = __aeabi_uwrite8
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ackCallback
@@ -241,9 +241,9 @@ Global Symbols
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[73]"></a>__rt_uwrite8</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, uwrite8.o(.text), UNUSED)
+<P><STRONG><a name="[72]"></a>__rt_uwrite8</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, uwrite8.o(.text), UNUSED)
 
-<P><STRONG><a name="[74]"></a>_uwrite8</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, uwrite8.o(.text), UNUSED)
+<P><STRONG><a name="[73]"></a>_uwrite8</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, uwrite8.o(.text), UNUSED)
 
 <P><STRONG><a name="[28]"></a>__scatterload</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, init.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main_after_scatterload
@@ -251,7 +251,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_main_scatterload
 </UL>
 
-<P><STRONG><a name="[75]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
+<P><STRONG><a name="[74]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
 
 <P><STRONG><a name="[2e]"></a>AutoCalPllFactor</STRONG> (Thumb, 106 bytes, Stack size 48 bytes, system_mm32spin2xx_p.o(i.AutoCalPllFactor))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = AutoCalPllFactor &rArr; __aeabi_uidivmod
@@ -341,9 +341,9 @@ Global Symbols
 <P><STRONG><a name="[1]"></a>NMI_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, common.o(i.NMI_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_mm32spin2xx_p_keil.o(RESET)
 </UL>
-<P><STRONG><a name="[5f]"></a>NVIC_Init</STRONG> (Thumb, 100 bytes, Stack size 0 bytes, hal_misc.o(i.NVIC_Init))
-<BR><BR>[Called By]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nvic_init
-<LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tim_interrupt_init_ms
+<P><STRONG><a name="[5e]"></a>NVIC_Init</STRONG> (Thumb, 100 bytes, Stack size 0 bytes, hal_misc.o(i.NVIC_Init))
+<BR><BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nvic_init
+<LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tim_interrupt_init_ms
 </UL>
 
 <P><STRONG><a name="[4]"></a>PendSV_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, common.o(i.PendSV_Handler))
@@ -388,91 +388,90 @@ Global Symbols
 <P><STRONG><a name="[17]"></a>TIM8_BRK_UP_TRG_COM_IRQHandler</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, isr.o(i.TIM8_BRK_UP_TRG_COM_IRQHandler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_mm32spin2xx_p_keil.o(RESET)
 </UL>
-<P><STRONG><a name="[21]"></a>UART1_IRQHandler</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, isr.o(i.UART1_IRQHandler))
+<P><STRONG><a name="[21]"></a>UART1_IRQHandler</STRONG> (Thumb, 74 bytes, Stack size 8 bytes, isr.o(i.UART1_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 100<LI>Call Chain = UART1_IRQHandler &rArr; comm_getByte &rArr; fifo_pushByte &rArr; fifo_getAvailable &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_getchar
-<LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_toggle
-<LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_getByte
+<BR>[Calls]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_toggle
+<LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_getByte
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_mm32spin2xx_p_keil.o(RESET)
 </UL>
 <P><STRONG><a name="[22]"></a>UART2_IRQHandler</STRONG> (Thumb, 70 bytes, Stack size 8 bytes, isr.o(i.UART2_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = UART2_IRQHandler
 </UL>
-<BR>[Calls]<UL><LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mt9v03x_uart_callback
+<BR>[Calls]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mt9v03x_uart_callback
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_mm32spin2xx_p_keil.o(RESET)
 </UL>
-<P><STRONG><a name="[76]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[75]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[77]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[76]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
 
-<P><STRONG><a name="[78]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[77]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
-<P><STRONG><a name="[62]"></a>afio_init</STRONG> (Thumb, 206 bytes, Stack size 36 bytes, zf_gpio.o(i.afio_init))
+<P><STRONG><a name="[61]"></a>afio_init</STRONG> (Thumb, 206 bytes, Stack size 36 bytes, zf_gpio.o(i.afio_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = afio_init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_pin_init
+<BR>[Called By]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_pin_init
 </UL>
 
-<P><STRONG><a name="[48]"></a>board_init</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, board.o(i.board_init))
+<P><STRONG><a name="[47]"></a>board_init</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, board.o(i.board_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 84<LI>Call Chain = board_init &rArr; uart_init &rArr; uart_pin_init &rArr; afio_init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
+<BR>[Calls]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[3a]"></a>comm_getByte</STRONG> (Thumb, 54 bytes, Stack size 16 bytes, comm.o(i.comm_getByte))
+<P><STRONG><a name="[39]"></a>comm_getByte</STRONG> (Thumb, 54 bytes, Stack size 16 bytes, comm.o(i.comm_getByte))
 <BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = comm_getByte &rArr; fifo_pushByte &rArr; fifo_getAvailable &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_pushByte
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<BR>[Calls]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_pushByte
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART1_IRQHandler
 </UL>
 
-<P><STRONG><a name="[38]"></a>comm_handle</STRONG> (Thumb, 894 bytes, Stack size 40 bytes, comm.o(i.comm_handle))
+<P><STRONG><a name="[38]"></a>comm_handle</STRONG> (Thumb, 906 bytes, Stack size 40 bytes, comm.o(i.comm_handle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 124<LI>Call Chain = comm_handle &rArr; fifo_popBuf &rArr; fifo_getUsed &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendFrame
-<LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
-<LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_crc8
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_query
-<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_count
-<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_popBuf
-<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getUsed
-<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_clean
-<LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite8
-<LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread8
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
-<LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
-<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
-<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
+<BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendFrame
+<LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
+<LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_crc8
+<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_query
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_count
+<LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_popBuf
+<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getUsed
+<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_clean
+<LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite8
+<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread8
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
+<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
+<LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM2_IRQHandler
 </UL>
 
-<P><STRONG><a name="[47]"></a>comm_putBuf</STRONG> (Thumb, 20 bytes, Stack size 16 bytes, main.o(i.comm_putBuf))
+<P><STRONG><a name="[46]"></a>comm_putBuf</STRONG> (Thumb, 20 bytes, Stack size 16 bytes, main.o(i.comm_putBuf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = comm_putBuf &rArr; uart_putbuff
 </UL>
-<BR>[Calls]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_putbuff
+<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_putbuff
 </UL>
-<BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendFrame
+<BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendFrame
 </UL>
 
-<P><STRONG><a name="[51]"></a>comm_start</STRONG> (Thumb, 236 bytes, Stack size 16 bytes, comm.o(i.comm_start))
+<P><STRONG><a name="[50]"></a>comm_start</STRONG> (Thumb, 236 bytes, Stack size 16 bytes, comm.o(i.comm_start))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = comm_start &rArr; list_append &rArr; malloc
 </UL>
-<BR>[Calls]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_delete
-<LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_create
-<LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_append
-<LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_delete
-<LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_create
-<LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<BR>[Calls]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_delete
+<LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_create
+<LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_append
+<LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_delete
+<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_create
+<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -480,158 +479,158 @@ Global Symbols
 <P><STRONG><a name="[37]"></a>comm_tick</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, comm.o(i.comm_tick))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = comm_tick &rArr; __aeabi_uwrite8
 </UL>
-<BR>[Calls]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite8
-<LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread8
+<BR>[Calls]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite8
+<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread8
 </UL>
 <BR>[Called By]<UL><LI><a href="#[13]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM1_BRK_UP_TRG_COM_IRQHandler
 </UL>
 
-<P><STRONG><a name="[4c]"></a>fifo_clean</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, fifo.o(i.fifo_clean))
+<P><STRONG><a name="[4b]"></a>fifo_clean</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, fifo.o(i.fifo_clean))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = fifo_clean
 </UL>
-<BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<BR>[Calls]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[52]"></a>fifo_create</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, fifo.o(i.fifo_create))
+<P><STRONG><a name="[51]"></a>fifo_create</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, fifo.o(i.fifo_create))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = fifo_create &rArr; malloc
 </UL>
-<BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
+<BR>[Calls]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 </UL>
-<BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
+<BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
 </UL>
 
-<P><STRONG><a name="[55]"></a>fifo_delete</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, fifo.o(i.fifo_delete))
+<P><STRONG><a name="[54]"></a>fifo_delete</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, fifo.o(i.fifo_delete))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = fifo_delete &rArr; free
 </UL>
-<BR>[Calls]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
+<BR>[Calls]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
 </UL>
-<BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
+<BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
 </UL>
 
-<P><STRONG><a name="[57]"></a>fifo_getAvailable</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, fifo.o(i.fifo_getAvailable))
+<P><STRONG><a name="[56]"></a>fifo_getAvailable</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, fifo.o(i.fifo_getAvailable))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = fifo_getAvailable &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<BR>[Calls]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 <LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_pushByte
+<BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_pushByte
 </UL>
 
-<P><STRONG><a name="[4d]"></a>fifo_getUsed</STRONG> (Thumb, 58 bytes, Stack size 24 bytes, fifo.o(i.fifo_getUsed))
+<P><STRONG><a name="[4c]"></a>fifo_getUsed</STRONG> (Thumb, 58 bytes, Stack size 24 bytes, fifo.o(i.fifo_getUsed))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = fifo_getUsed &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<BR>[Calls]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 <LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_popBuf
+<BR>[Called By]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_popBuf
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[4b]"></a>fifo_popBuf</STRONG> (Thumb, 92 bytes, Stack size 32 bytes, fifo.o(i.fifo_popBuf))
+<P><STRONG><a name="[4a]"></a>fifo_popBuf</STRONG> (Thumb, 92 bytes, Stack size 32 bytes, fifo.o(i.fifo_popBuf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 84<LI>Call Chain = fifo_popBuf &rArr; fifo_getUsed &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getUsed
-<LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getUsed
+<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 <LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[4a]"></a>fifo_pushByte</STRONG> (Thumb, 78 bytes, Stack size 24 bytes, fifo.o(i.fifo_pushByte))
+<P><STRONG><a name="[49]"></a>fifo_pushByte</STRONG> (Thumb, 78 bytes, Stack size 24 bytes, fifo.o(i.fifo_pushByte))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = fifo_pushByte &rArr; fifo_getAvailable &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getAvailable
-<LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<BR>[Calls]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_getAvailable
+<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 <LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_getByte
+<BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_getByte
 </UL>
 
-<P><STRONG><a name="[3f]"></a>free</STRONG> (Thumb, 80 bytes, Stack size 8 bytes, malloc.o(i.free))
+<P><STRONG><a name="[3e]"></a>free</STRONG> (Thumb, 80 bytes, Stack size 8 bytes, malloc.o(i.free))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = free
 </UL>
-<BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
+<BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ackCallback
-<LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_delete
-<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_clean
-<LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_delete
+<LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_delete
+<LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_clean
+<LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_delete
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[5a]"></a>gpio_init</STRONG> (Thumb, 190 bytes, Stack size 36 bytes, zf_gpio.o(i.gpio_init))
+<P><STRONG><a name="[59]"></a>gpio_init</STRONG> (Thumb, 190 bytes, Stack size 36 bytes, zf_gpio.o(i.gpio_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = gpio_init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[5c]"></a>gpio_set</STRONG> (Thumb, 86 bytes, Stack size 8 bytes, zf_gpio.o(i.gpio_set))
+<P><STRONG><a name="[5b]"></a>gpio_set</STRONG> (Thumb, 86 bytes, Stack size 8 bytes, zf_gpio.o(i.gpio_set))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = gpio_set
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[3b]"></a>gpio_toggle</STRONG> (Thumb, 108 bytes, Stack size 0 bytes, zf_gpio.o(i.gpio_toggle))
+<P><STRONG><a name="[3a]"></a>gpio_toggle</STRONG> (Thumb, 108 bytes, Stack size 0 bytes, zf_gpio.o(i.gpio_toggle))
 <BR><BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART1_IRQHandler
 </UL>
 
-<P><STRONG><a name="[54]"></a>list_append</STRONG> (Thumb, 120 bytes, Stack size 32 bytes, list.o(i.list_append))
+<P><STRONG><a name="[53]"></a>list_append</STRONG> (Thumb, 120 bytes, Stack size 32 bytes, list.o(i.list_append))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = list_append &rArr; malloc
 </UL>
-<BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
-<LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
-<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
+<BR>[Calls]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
+<LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
-<BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
+<BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
 </UL>
 
-<P><STRONG><a name="[58]"></a>list_clean</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, list.o(i.list_clean))
+<P><STRONG><a name="[57]"></a>list_clean</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, list.o(i.list_clean))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = list_clean &rArr; free
 </UL>
-<BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
-<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
+<BR>[Calls]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
 </UL>
-<BR>[Called By]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_delete
+<BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_delete
 </UL>
 
-<P><STRONG><a name="[4f]"></a>list_count</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, list.o(i.list_count))
+<P><STRONG><a name="[4e]"></a>list_count</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, list.o(i.list_count))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = list_count
 </UL>
-<BR>[Calls]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<BR>[Calls]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[53]"></a>list_create</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, list.o(i.list_create))
+<P><STRONG><a name="[52]"></a>list_create</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, list.o(i.list_create))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = list_create &rArr; malloc
 </UL>
-<BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
+<BR>[Calls]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 </UL>
-<BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
+<BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
 </UL>
 
-<P><STRONG><a name="[56]"></a>list_delete</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, list.o(i.list_delete))
+<P><STRONG><a name="[55]"></a>list_delete</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, list.o(i.list_delete))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = list_delete &rArr; list_clean &rArr; free
 </UL>
-<BR>[Calls]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_clean
-<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
+<BR>[Calls]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_clean
+<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
 </UL>
-<BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
+<BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
 </UL>
 
-<P><STRONG><a name="[4e]"></a>list_query</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, list.o(i.list_query))
+<P><STRONG><a name="[4d]"></a>list_query</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, list.o(i.list_query))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = list_query
 </UL>
-<BR>[Calls]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
-<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
+<BR>[Calls]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
@@ -639,23 +638,23 @@ Global Symbols
 <P><STRONG><a name="[23]"></a>main</STRONG> (Thumb, 122 bytes, Stack size 0 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 84<LI>Call Chain = main &rArr; board_init &rArr; uart_init &rArr; uart_pin_init &rArr; afio_init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_rx_irq
-<LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tim_interrupt_init_ms
-<LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;systick_delay_ms
-<LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_set
-<LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_init
-<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
-<LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;board_init
+<BR>[Calls]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_rx_irq
+<LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tim_interrupt_init_ms
+<LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;systick_delay_ms
+<LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_set
+<LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_init
+<LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_start
+<LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;board_init
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
-<P><STRONG><a name="[45]"></a>malloc</STRONG> (Thumb, 92 bytes, Stack size 20 bytes, malloc.o(i.malloc))
+<P><STRONG><a name="[44]"></a>malloc</STRONG> (Thumb, 92 bytes, Stack size 20 bytes, malloc.o(i.malloc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = malloc
 </UL>
-<BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
-<LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_create
-<LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_append
-<LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_create
+<BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
+<LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_create
+<LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_append
+<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fifo_create
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
@@ -663,7 +662,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[11]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel4_5_IRQHandler
 </UL>
 
-<P><STRONG><a name="[3c]"></a>mt9v03x_uart_callback</STRONG> (Thumb, 66 bytes, Stack size 0 bytes, seekfree_mt9v03x.o(i.mt9v03x_uart_callback))
+<P><STRONG><a name="[3b]"></a>mt9v03x_uart_callback</STRONG> (Thumb, 66 bytes, Stack size 0 bytes, seekfree_mt9v03x.o(i.mt9v03x_uart_callback))
 <BR><BR>[Called By]<UL><LI><a href="#[22]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART2_IRQHandler
 </UL>
 
@@ -671,58 +670,54 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI4_15_IRQHandler
 </UL>
 
-<P><STRONG><a name="[5e]"></a>nvic_init</STRONG> (Thumb, 22 bytes, Stack size 24 bytes, common.o(i.nvic_init))
+<P><STRONG><a name="[5d]"></a>nvic_init</STRONG> (Thumb, 22 bytes, Stack size 24 bytes, common.o(i.nvic_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = nvic_init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
+<BR>[Calls]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_rx_irq
-</UL>
-
-<P><STRONG><a name="[60]"></a>systick_delay</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, zf_systick.o(i.systick_delay))
-<BR><BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;systick_delay_ms
+<BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_rx_irq
 </UL>
 
-<P><STRONG><a name="[5d]"></a>systick_delay_ms</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, zf_systick.o(i.systick_delay_ms))
+<P><STRONG><a name="[5f]"></a>systick_delay</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, zf_systick.o(i.systick_delay))
+<BR><BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;systick_delay_ms
+</UL>
+
+<P><STRONG><a name="[5c]"></a>systick_delay_ms</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, zf_systick.o(i.systick_delay_ms))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = systick_delay_ms &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;systick_delay
+<BR>[Calls]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;systick_delay
 <LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[5b]"></a>tim_interrupt_init_ms</STRONG> (Thumb, 198 bytes, Stack size 48 bytes, zf_pit.o(i.tim_interrupt_init_ms))
+<P><STRONG><a name="[5a]"></a>tim_interrupt_init_ms</STRONG> (Thumb, 198 bytes, Stack size 48 bytes, zf_pit.o(i.tim_interrupt_init_ms))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = tim_interrupt_init_ms
 </UL>
-<BR>[Calls]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
+<BR>[Calls]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[39]"></a>uart_getchar</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, zf_uart.o(i.uart_getchar))
-<BR><BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART1_IRQHandler
-</UL>
-
-<P><STRONG><a name="[49]"></a>uart_init</STRONG> (Thumb, 180 bytes, Stack size 24 bytes, zf_uart.o(i.uart_init))
+<P><STRONG><a name="[48]"></a>uart_init</STRONG> (Thumb, 180 bytes, Stack size 24 bytes, zf_uart.o(i.uart_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = uart_init &rArr; uart_pin_init &rArr; afio_init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_pin_init
+<BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_pin_init
 <LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;board_init
+<BR>[Called By]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;board_init
 </UL>
 
-<P><STRONG><a name="[50]"></a>uart_putbuff</STRONG> (Thumb, 42 bytes, Stack size 12 bytes, zf_uart.o(i.uart_putbuff))
+<P><STRONG><a name="[4f]"></a>uart_putbuff</STRONG> (Thumb, 42 bytes, Stack size 12 bytes, zf_uart.o(i.uart_putbuff))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = uart_putbuff
 </UL>
-<BR>[Called By]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_putBuf
+<BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_putBuf
 </UL>
 
-<P><STRONG><a name="[59]"></a>uart_rx_irq</STRONG> (Thumb, 66 bytes, Stack size 16 bytes, zf_uart.o(i.uart_rx_irq))
+<P><STRONG><a name="[58]"></a>uart_rx_irq</STRONG> (Thumb, 66 bytes, Stack size 16 bytes, zf_uart.o(i.uart_rx_irq))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = uart_rx_irq &rArr; nvic_init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nvic_init
+<BR>[Calls]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nvic_init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -730,46 +725,46 @@ Global Symbols
 <H3>
 Local Symbols
 </H3>
-<P><STRONG><a name="[26]"></a>_ackCallback</STRONG> (Thumb, 212 bytes, Stack size 32 bytes, comm.o(i._ackCallback))
+<P><STRONG><a name="[26]"></a>_ackCallback</STRONG> (Thumb, 222 bytes, Stack size 32 bytes, comm.o(i._ackCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = _ackCallback &rArr; _sendFrame &rArr; comm_putBuf &rArr; uart_putbuff
 </UL>
-<BR>[Calls]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendFrame
-<LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite8
-<LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread8
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
-<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
-<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
+<BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendFrame
+<LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite8
+<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread8
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
+<LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> comm.o(.constdata)
 </UL>
-<P><STRONG><a name="[46]"></a>_crc8</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, comm.o(i._crc8))
+<P><STRONG><a name="[45]"></a>_crc8</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, comm.o(i._crc8))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = _crc8
 </UL>
-<BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
+<BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[44]"></a>_sendAck</STRONG> (Thumb, 190 bytes, Stack size 32 bytes, comm.o(i._sendAck))
+<P><STRONG><a name="[43]"></a>_sendAck</STRONG> (Thumb, 190 bytes, Stack size 32 bytes, comm.o(i._sendAck))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = _sendAck &rArr; _sendFrame &rArr; comm_putBuf &rArr; uart_putbuff
 </UL>
-<BR>[Calls]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendFrame
-<LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_crc8
-<LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
-<LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
-<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
-<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
+<BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendFrame
+<LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_crc8
+<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uwrite4
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
+<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
+<LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
 
-<P><STRONG><a name="[41]"></a>_sendFrame</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, comm.o(i._sendFrame))
+<P><STRONG><a name="[40]"></a>_sendFrame</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, comm.o(i._sendFrame))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = _sendFrame &rArr; comm_putBuf &rArr; uart_putbuff
 </UL>
-<BR>[Calls]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_putBuf
+<BR>[Calls]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_putBuf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
+<BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sendAck
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ackCallback
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;comm_handle
 </UL>
@@ -791,12 +786,12 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetSysClock
 </UL>
 
-<P><STRONG><a name="[61]"></a>uart_pin_init</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, zf_uart.o(i.uart_pin_init))
+<P><STRONG><a name="[60]"></a>uart_pin_init</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, zf_uart.o(i.uart_pin_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = uart_pin_init &rArr; afio_init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;afio_init
+<BR>[Calls]<UL><LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;afio_init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
+<BR>[Called By]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
 </UL>
 <P>
 <H3>

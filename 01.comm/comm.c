@@ -246,7 +246,7 @@ void comm_handle(void)
             }
         }
     }
-    else
+    if(comm_cb.rx_item)
     {
         if(comm_cb.time - comm_cb.rx_time >= COMM_RX_TIMEOUT)
         {
