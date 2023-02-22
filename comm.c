@@ -24,9 +24,9 @@
  */
 typedef struct
 {
-    comm_uint8 tag;         // 帧类型
-    comm_uint16 len;        // 帧长度
-    comm_uint8 value[];     // 帧数据
+    comm_uint8 tag;                 // 帧类型
+    comm_uint16 len;                // 帧长度
+    comm_uint8 value[];             // 帧数据
 }_comm_tlv_t;
 
 /**
@@ -35,13 +35,24 @@ typedef struct
  */
 typedef struct
 {
-    comm_uint16 head;       // 起始标识
-    comm_uint8 hcrc;        // 帧头校验
-    comm_uint8 dcrc;        // 数据校验
-    comm_uint32 sn;         // 帧流水编号
-    comm_uint32 len;        // 数据长度
-    _comm_tlv_t tlv[];      // tlv结构体
+    comm_uint16 head;               // 起始标识
+    comm_uint8 hcrc;                // 帧头校验
+    comm_uint8 dcrc;                // 数据校验
+    comm_uint32 sn;                 // 帧流水编号
+    comm_uint32 len;                // 数据长度
+    _comm_tlv_t tlv[];              // tlv结构体
 }comm_item_t;
+
+/**
+ * @brief 回调函数结构体
+ * 
+ */
+typedef struct
+{
+    comm_uint8 tag;
+    void (*callback)(comm_uint16 len, comm_uint8* value);
+}comm_callback_t;
+
 
 /**
  * @brief 协议控制块结构体
@@ -49,16 +60,16 @@ typedef struct
  */
 typedef struct
 {
-    comm_uint8 state;       // 协议运行状态
-    fifo_cb* tx_fifo;       // 发送队列
-    fifo_cb* rx_fifo;       // 接收队列
-    fifo_cb* rx_bytefifo;   // 接收字节缓冲区
-    comm_uint32 tx_sn;      // 发送流水编号
-    comm_uint64 time;       // 时间戳
-    comm_item_t* tx_item;   // 当前发送帧指针
-    comm_item_t* rx_item;   // 当前接收帧指针
-    comm_uint8 repeat;      // 重发次数
-    comm_uint32 rx_len;     // 当前接收长度
+    comm_uint8 state;               // 协议运行状态
+    fifo_cb_t* tx_fifo;             // 发送队列
+    fifo_cb_t* rx_fifo;             // 接收队列
+    fifo_cb_t* rx_bytefifo;         // 接收字节缓冲区
+    comm_uint32 tx_sn;              // 发送流水编号
+    comm_uint64 time;               // 时间戳
+    comm_item_t* tx_item;           // 当前发送帧指针
+    comm_item_t* rx_item;           // 当前接收帧指针
+    comm_uint8 repeat;              // 重发次数
+    comm_uint32 rx_len;             // 当前接收长度
 }comm_cb_t;
 
 #pragma pack() // 恢复默认字节对齐
