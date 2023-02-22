@@ -241,6 +241,8 @@ void comm_handle(void)
             else
             {
                 fifo_clean(comm_cb.rx_bytefifo);
+                COMM_FREE(comm_cb.rx_item);
+                comm_cb.rx_item = COMM_NULL;
             }
         }
     }

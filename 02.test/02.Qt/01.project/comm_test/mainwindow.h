@@ -27,8 +27,6 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
-private:
     Ui::MainWindow *ui;
     QTimer tickTimer;
     QTimer handleTimer;
@@ -36,6 +34,7 @@ private:
 public slots:
     void tick();
     void handle();
+    void sendFrame();
     void ReceiveSerialData();
     void ShowMessage(QString Message);
     void CleanData(void);

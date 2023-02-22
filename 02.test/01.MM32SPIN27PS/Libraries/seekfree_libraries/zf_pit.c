@@ -1,16 +1,16 @@
 /*********************************************************************************************************************
 * COPYRIGHT NOTICE
-* Copyright (c) 2019,Öð·É¿Æ¼¼
+* Copyright (c) 2019,é€é£žç§‘æŠ€
 * All rights reserved.
-* ¼¼ÊõÌÖÂÛQQÈº£ºÒ»Èº£º179029047(ÒÑÂú)  ¶þÈº£º244861897
+* æŠ€æœ¯è®¨è®ºQQç¾¤ï¼šä¸€ç¾¤ï¼š179029047(å·²æ»¡)  äºŒç¾¤ï¼š244861897
 *
-* ÒÔÏÂËùÓÐÄÚÈÝ°æÈ¨¾ùÊôÖð·É¿Æ¼¼ËùÓÐ£¬Î´¾­ÔÊÐí²»µÃÓÃÓÚÉÌÒµÓÃÍ¾£¬
-* »¶Ó­¸÷Î»Ê¹ÓÃ²¢´«²¥±¾³ÌÐò£¬ÐÞ¸ÄÄÚÈÝÊ±±ØÐë±£ÁôÖð·É¿Æ¼¼µÄ°æÈ¨ÉùÃ÷¡£
+* ä»¥ä¸‹æ‰€æœ‰å†…å®¹ç‰ˆæƒå‡å±žé€é£žç§‘æŠ€æ‰€æœ‰ï¼Œæœªç»å…è®¸ä¸å¾—ç”¨äºŽå•†ä¸šç”¨é€”ï¼Œ
+* æ¬¢è¿Žå„ä½ä½¿ç”¨å¹¶ä¼ æ’­æœ¬ç¨‹åºï¼Œä¿®æ”¹å†…å®¹æ—¶å¿…é¡»ä¿ç•™é€é£žç§‘æŠ€çš„ç‰ˆæƒå£°æ˜Žã€‚
 *
 * @file				pit
-* @company			³É¶¼Öð·É¿Æ¼¼ÓÐÏÞ¹«Ë¾
-* @author			Öð·É¿Æ¼¼(QQ3184284598)
-* @version			²é¿´docÄÚversionÎÄ¼þ °æ±¾ËµÃ÷
+* @company			æˆéƒ½é€é£žç§‘æŠ€æœ‰é™å…¬å¸
+* @author			é€é£žç§‘æŠ€(QQ3184284598)
+* @version			æŸ¥çœ‹docå†…versionæ–‡ä»¶ ç‰ˆæœ¬è¯´æ˜Ž
 * @Software			IAR 8.3 or MDK 5.28
 * @Target core		MM32SPIN2XPs
 * @Taobao			https://seekfree.taobao.com/
@@ -20,10 +20,10 @@
 #include "zf_pit.h"
 
 //-------------------------------------------------------------------------------------------------------------------
-// @brief		TIM ÖÐ¶Ï³õÊ¼»¯
-// @param		tim				Ñ¡ÔñÖÐ¶ÏÊ¹ÓÃµÄ TIM
-// @param		freq			ÉèÖÃÆµÂÊ Í¬¸öÄ£¿éÖ»ÓÐ×îºóÒ»´ÎÉèÖÃÉúÐ§
-// @param		priority		Ñ¡Ôñ¸ÃÖÐ¶ÏÓÅÏÈ¼¶ ·¶Î§ [0-3]
+// @brief		TIM ä¸­æ–­åˆå§‹åŒ–
+// @param		tim				é€‰æ‹©ä¸­æ–­ä½¿ç”¨çš„ TIM
+// @param		freq			è®¾ç½®é¢‘çŽ‡ åŒä¸ªæ¨¡å—åªæœ‰æœ€åŽä¸€æ¬¡è®¾ç½®ç”Ÿæ•ˆ
+// @param		priority		é€‰æ‹©è¯¥ä¸­æ–­ä¼˜å…ˆçº§ èŒƒå›´ [0-3]
 // @return		void
 // Sample usage:				tim_interrupt_init(TIM_1, 1, 0x00);
 //-------------------------------------------------------------------------------------------------------------------
@@ -40,32 +40,32 @@ void tim_interrupt_init (TIM_enum tim, uint32 freq, uint8 priority)
 		TIM17_IRQn
 	};
 
-	NVIC_InitTypeDef NVIC_InitStructure;														// ÖÐ¶ÏÅäÖÃ½á¹¹Ìå
-	uint16 freq_div = ((SystemCoreClock / freq) >> 15);											// ¼ÆËãÔ¤·ÖÆµ
-	uint16 period_temp = (SystemCoreClock / freq / (freq_div+1));								// ¼ÆËã×Ô¶¯ÖØ×°ÔØÖµ
+	NVIC_InitTypeDef NVIC_InitStructure;														// ä¸­æ–­é…ç½®ç»“æž„ä½“
+	uint16 freq_div = ((SystemCoreClock / freq) >> 15);											// è®¡ç®—é¢„åˆ†é¢‘
+	uint16 period_temp = (SystemCoreClock / freq / (freq_div+1));								// è®¡ç®—è‡ªåŠ¨é‡è£…è½½å€¼
 
 	if(tim & 0xf000)
-		RCC->APB2ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// Ê¹ÄÜÊ±ÖÓ
+		RCC->APB2ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// ä½¿èƒ½æ—¶é’Ÿ
 	else
-		RCC->APB1ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// Ê¹ÄÜÊ±ÖÓ
+		RCC->APB1ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// ä½¿èƒ½æ—¶é’Ÿ
 
-	tim_index[(tim&0x0f)]->ARR = period_temp;													// ×°ÔØ×Ô¶¯ÖØ×°ÔØÖµ
-	tim_index[(tim&0x0f)]->PSC = freq_div;														// ×°ÔØÔ¤·ÖÆµ
-	tim_index[(tim&0x0f)]->DIER |= TIM_DIER_UI;													// Ê¹ÄÜÖÐ¶Ï¸üÐÂ
+	tim_index[(tim&0x0f)]->ARR = period_temp;													// è£…è½½è‡ªåŠ¨é‡è£…è½½å€¼
+	tim_index[(tim&0x0f)]->PSC = freq_div;														// è£…è½½é¢„åˆ†é¢‘
+	tim_index[(tim&0x0f)]->DIER |= TIM_DIER_UI;													// ä½¿èƒ½ä¸­æ–­æ›´æ–°
 
-	NVIC_InitStructure.NVIC_IRQChannel = irq_index[(tim&0x0f)];									// ÖÐ¶ÏÑ¡Ôñ
-	NVIC_InitStructure.NVIC_IRQChannelPriority = priority & 0x03;								// ÉèÖÃÓÅÏÈ¼¶
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;												// Ê¹ÄÜÖÐ¶Ï
-	NVIC_Init(&NVIC_InitStructure);																// ³õÊ¼»¯ÖÐ¶ÏÅäÖÃ
+	NVIC_InitStructure.NVIC_IRQChannel = irq_index[(tim&0x0f)];									// ä¸­æ–­é€‰æ‹©
+	NVIC_InitStructure.NVIC_IRQChannelPriority = priority & 0x03;								// è®¾ç½®ä¼˜å…ˆçº§
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;												// ä½¿èƒ½ä¸­æ–­
+	NVIC_Init(&NVIC_InitStructure);																// åˆå§‹åŒ–ä¸­æ–­é…ç½®
 
-	tim_index[(tim&0x0f)]->CR1 |= TIM_CR1_CEN;													// Ê¹ÄÜ¶¨Ê±Æ÷
+	tim_index[(tim&0x0f)]->CR1 |= TIM_CR1_CEN;													// ä½¿èƒ½å®šæ—¶å™¨
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// @brief		TIM ÖÐ¶Ï³õÊ¼»¯ us¼¶±ðÖÐ¶Ï
-// @param		tim				Ñ¡ÔñÖÐ¶ÏÊ¹ÓÃµÄ TIM
-// @param		timer			ÉèÖÃÊ±³¤ Í¬¸öÄ£¿éÖ»ÓÐ×îºóÒ»´ÎÉèÖÃÉúÐ§
-// @param		priority		Ñ¡Ôñ¸ÃÖÐ¶ÏÓÅÏÈ¼¶ ·¶Î§ [0-3]
+// @brief		TIM ä¸­æ–­åˆå§‹åŒ– usçº§åˆ«ä¸­æ–­
+// @param		tim				é€‰æ‹©ä¸­æ–­ä½¿ç”¨çš„ TIM
+// @param		timer			è®¾ç½®æ—¶é•¿ åŒä¸ªæ¨¡å—åªæœ‰æœ€åŽä¸€æ¬¡è®¾ç½®ç”Ÿæ•ˆ
+// @param		priority		é€‰æ‹©è¯¥ä¸­æ–­ä¼˜å…ˆçº§ èŒƒå›´ [0-3]
 // @return		void
 // Sample usage:				tim_interrupt_init(TIM_1, 1, 0x00);
 //-------------------------------------------------------------------------------------------------------------------
@@ -83,32 +83,32 @@ void tim_interrupt_init_us (TIM_enum tim, uint32 timer, uint8 priority)
 		TIM17_IRQn
 	};
 
-	NVIC_InitTypeDef NVIC_InitStructure;														// ÖÐ¶ÏÅäÖÃ½á¹¹Ìå
-	uint16 freq_div = 1;																		// ¼ÆËãÔ¤·ÖÆµ
-	uint16 period_temp = timer*48-1;															// ¼ÆËã×Ô¶¯ÖØ×°ÔØÖµ
+	NVIC_InitTypeDef NVIC_InitStructure;														// ä¸­æ–­é…ç½®ç»“æž„ä½“
+	uint16 freq_div = 1;																		// è®¡ç®—é¢„åˆ†é¢‘
+	uint16 period_temp = timer*48-1;															// è®¡ç®—è‡ªåŠ¨é‡è£…è½½å€¼
 
 	if(tim & 0xf000)
-		RCC->APB2ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// Ê¹ÄÜÊ±ÖÓ
+		RCC->APB2ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// ä½¿èƒ½æ—¶é’Ÿ
 	else
-		RCC->APB1ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// Ê¹ÄÜÊ±ÖÓ
+		RCC->APB1ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// ä½¿èƒ½æ—¶é’Ÿ
 
-	tim_index[(tim&0x0f)]->ARR = period_temp;													// ×°ÔØ×Ô¶¯ÖØ×°ÔØÖµ
-	tim_index[(tim&0x0f)]->PSC = freq_div;														// ×°ÔØÔ¤·ÖÆµ
-	tim_index[(tim&0x0f)]->DIER |= TIM_DIER_UI;													// Ê¹ÄÜÖÐ¶Ï¸üÐÂ
+	tim_index[(tim&0x0f)]->ARR = period_temp;													// è£…è½½è‡ªåŠ¨é‡è£…è½½å€¼
+	tim_index[(tim&0x0f)]->PSC = freq_div;														// è£…è½½é¢„åˆ†é¢‘
+	tim_index[(tim&0x0f)]->DIER |= TIM_DIER_UI;													// ä½¿èƒ½ä¸­æ–­æ›´æ–°
 
-	NVIC_InitStructure.NVIC_IRQChannel = irq_index[(tim&0x0f)];									// ÖÐ¶ÏÑ¡Ôñ
-	NVIC_InitStructure.NVIC_IRQChannelPriority = priority & 0x03;								// ÉèÖÃÓÅÏÈ¼¶
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;												// Ê¹ÄÜÖÐ¶Ï
-	NVIC_Init(&NVIC_InitStructure);																// ³õÊ¼»¯ÖÐ¶ÏÅäÖÃ
+	NVIC_InitStructure.NVIC_IRQChannel = irq_index[(tim&0x0f)];									// ä¸­æ–­é€‰æ‹©
+	NVIC_InitStructure.NVIC_IRQChannelPriority = priority & 0x03;								// è®¾ç½®ä¼˜å…ˆçº§
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;												// ä½¿èƒ½ä¸­æ–­
+	NVIC_Init(&NVIC_InitStructure);																// åˆå§‹åŒ–ä¸­æ–­é…ç½®
 
-	tim_index[(tim&0x0f)]->CR1 |= TIM_CR1_CEN;													// Ê¹ÄÜ¶¨Ê±Æ÷
+	tim_index[(tim&0x0f)]->CR1 |= TIM_CR1_CEN;													// ä½¿èƒ½å®šæ—¶å™¨
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// @brief		TIM ÖÐ¶Ï³õÊ¼»¯ ms¼¶±ðÖÐ¶Ï
-// @param		tim				Ñ¡ÔñÖÐ¶ÏÊ¹ÓÃµÄ TIM
-// @param		timer			ÉèÖÃÊ±³¤ Í¬¸öÄ£¿éÖ»ÓÐ×îºóÒ»´ÎÉèÖÃÉúÐ§
-// @param		priority		Ñ¡Ôñ¸ÃÖÐ¶ÏÓÅÏÈ¼¶ ·¶Î§ [0-3]
+// @brief		TIM ä¸­æ–­åˆå§‹åŒ– msçº§åˆ«ä¸­æ–­
+// @param		tim				é€‰æ‹©ä¸­æ–­ä½¿ç”¨çš„ TIM
+// @param		timer			è®¾ç½®æ—¶é•¿ åŒä¸ªæ¨¡å—åªæœ‰æœ€åŽä¸€æ¬¡è®¾ç½®ç”Ÿæ•ˆ
+// @param		priority		é€‰æ‹©è¯¥ä¸­æ–­ä¼˜å…ˆçº§ èŒƒå›´ [0-3]
 // @return		void
 // Sample usage:				tim_interrupt_init(TIM_1, 1, 0x00);
 //-------------------------------------------------------------------------------------------------------------------
@@ -126,45 +126,45 @@ void tim_interrupt_init_ms (TIM_enum tim, uint32 timer, uint8 priority)
 		TIM17_IRQn
 	};
 
-	NVIC_InitTypeDef NVIC_InitStructure;														// ÖÐ¶ÏÅäÖÃ½á¹¹Ìå
-	uint16 freq_div = 8000-1;																	// ¼ÆËãÔ¤·ÖÆµ
-	uint16 period_temp = 12*timer-1;															// ¼ÆËã×Ô¶¯ÖØ×°ÔØÖµ
+	NVIC_InitTypeDef NVIC_InitStructure;														// ä¸­æ–­é…ç½®ç»“æž„ä½“
+	uint16 freq_div = 8000-1;																	// è®¡ç®—é¢„åˆ†é¢‘
+	uint16 period_temp = 12*timer-1;															// è®¡ç®—è‡ªåŠ¨é‡è£…è½½å€¼
 
 	if(tim & 0xf000)
-		RCC->APB2ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// Ê¹ÄÜÊ±ÖÓ
+		RCC->APB2ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// ä½¿èƒ½æ—¶é’Ÿ
 	else
-		RCC->APB1ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// Ê¹ÄÜÊ±ÖÓ
+		RCC->APB1ENR |= ((uint32_t)0x00000001 << ((tim&0x0ff0) >> 4));							// ä½¿èƒ½æ—¶é’Ÿ
 
-	tim_index[(tim&0x0f)]->ARR = period_temp;													// ×°ÔØ×Ô¶¯ÖØ×°ÔØÖµ
-	tim_index[(tim&0x0f)]->PSC = freq_div;														// ×°ÔØÔ¤·ÖÆµ
-	tim_index[(tim&0x0f)]->DIER |= TIM_DIER_UI;													// Ê¹ÄÜÖÐ¶Ï¸üÐÂ
+	tim_index[(tim&0x0f)]->ARR = period_temp;													// è£…è½½è‡ªåŠ¨é‡è£…è½½å€¼
+	tim_index[(tim&0x0f)]->PSC = freq_div;														// è£…è½½é¢„åˆ†é¢‘
+	tim_index[(tim&0x0f)]->DIER |= TIM_DIER_UI;													// ä½¿èƒ½ä¸­æ–­æ›´æ–°
 
-	NVIC_InitStructure.NVIC_IRQChannel = irq_index[(tim&0x0f)];									// ÖÐ¶ÏÑ¡Ôñ
-	NVIC_InitStructure.NVIC_IRQChannelPriority = priority & 0x03;								// ÉèÖÃÓÅÏÈ¼¶
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;												// Ê¹ÄÜÖÐ¶Ï
-	NVIC_Init(&NVIC_InitStructure);																// ³õÊ¼»¯ÖÐ¶ÏÅäÖÃ
+	NVIC_InitStructure.NVIC_IRQChannel = irq_index[(tim&0x0f)];									// ä¸­æ–­é€‰æ‹©
+	NVIC_InitStructure.NVIC_IRQChannelPriority = priority & 0x03;								// è®¾ç½®ä¼˜å…ˆçº§
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;												// ä½¿èƒ½ä¸­æ–­
+	NVIC_Init(&NVIC_InitStructure);																// åˆå§‹åŒ–ä¸­æ–­é…ç½®
 
-	tim_index[(tim&0x0f)]->CR1 |= TIM_CR1_CEN;													// Ê¹ÄÜ¶¨Ê±Æ÷
+	tim_index[(tim&0x0f)]->CR1 |= TIM_CR1_CEN;													// ä½¿èƒ½å®šæ—¶å™¨
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// @brief		TIM ÖÐ¶ÏÊ¹ÄÜ
-// @param		tim				Ñ¡Ôñ TIM
+// @brief		TIM ä¸­æ–­ä½¿èƒ½
+// @param		tim				é€‰æ‹© TIM
 // @return		void
 // Sample usage:				tim_interrupt_enable(TIM_1);
 //-------------------------------------------------------------------------------------------------------------------
 void tim_interrupt_enable (TIM_enum tim)
 {
-	tim_index[(tim&0x0f)]->CR1 |= TIM_CR1_CEN;													// Ê¹ÄÜ¶¨Ê±Æ÷
+	tim_index[(tim&0x0f)]->CR1 |= TIM_CR1_CEN;													// ä½¿èƒ½å®šæ—¶å™¨
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// @brief		TIM ÖÐ¶ÏÊ§ÄÜ
-// @param		tim				Ñ¡Ôñ TIM
+// @brief		TIM ä¸­æ–­å¤±èƒ½
+// @param		tim				é€‰æ‹© TIM
 // @return		void
 // Sample usage:				tim_interrupt_disable(TIM_1);
 //-------------------------------------------------------------------------------------------------------------------
 void tim_interrupt_disable (TIM_enum tim)
 {
-	tim_index[(tim&0x0f)]->CR1 &= ~TIM_CR1_CEN;													// Ê§ÄÜ¶¨Ê±Æ÷
+	tim_index[(tim&0x0f)]->CR1 &= ~TIM_CR1_CEN;													// å¤±èƒ½å®šæ—¶å™¨
 }
