@@ -14,8 +14,10 @@
 #include "ui_mainwindow.h"
 #include "../../../../01.comm/comm.h"
 #include <QIntValidator>
+#include <QMutex>
 
 static MainWindow* thispt;
+QMutex fifo_mutex;
 
 /* @Function declarations */
 static QString ByteArrayToHexString(QByteArray ascii);
@@ -136,7 +138,9 @@ void MainWindow::tick()
  */
 void MainWindow::handle()
 {
+    fifo_mutex.lock();
     comm_handle();
+    fifo_mutex.unlock();
 }
 
 /**
@@ -145,9 +149,11 @@ void MainWindow::handle()
  */
 void MainWindow::ReceiveSerialData()
 {
+    fifo_mutex.lock();
     QByteArray dat = SerialReadData();
     comm_getBuf((comm_uint8*)dat.data(), dat.length());
     ui->dataRxTedit->append(ByteArrayToHexString(dat));
+    fifo_mutex.unlock();
 }
 
 /**
@@ -166,6 +172,7 @@ comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len)
         else
             return COMM_ERR_UNKNOW;
     }
+    return COMM_ERR_SUCCESS;
 }
 
 /**

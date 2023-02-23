@@ -74,10 +74,11 @@ void UART1_IRQHandler(void)
 	}
 	if(UART1->ISR & UART_ISR_RX_INTF)												// ???????????§Ø?
 	{
+        UART1->ICR |= UART_ICR_RXICLR;
+        gpio_set(C0, 0);
 		uint8 dat = (uint8)uart_index[UART_1]->RDR;
 		comm_getByte(dat);
-        gpio_toggle(C0);
-		UART1->ICR |= UART_ICR_RXICLR;												// ????§Ø???¦Ë
+        gpio_set(C0, 1);
 	}
 }
 

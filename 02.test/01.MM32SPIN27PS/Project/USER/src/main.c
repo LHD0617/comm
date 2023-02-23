@@ -66,17 +66,19 @@ int main(void)
     gpio_init(C1, GPO, 1, GPO_PUSH_PULL);
     gpio_init(C2, GPO, 1, GPO_PUSH_PULL);
     gpio_init(C3, GPO, 1, GPO_PUSH_PULL);
+    gpio_init(B15, GPI, 1, GPI_PULL_UP);
     comm_start();
     tim_interrupt_init_ms(TIM_1, 1, 0x00);
     tim_interrupt_init_ms(TIM_2, 5, 0x00);
     while(1)
     {
-        gpio_set(C1, 0);
-        systick_delay_ms(100);
-        gpio_set(C1, 1);
-        systick_delay_ms(500);
-        comm_tlv_t tlv = {.tag = 4, .len = sizeof(count), .value = (uint8*)&count};
-        comm_send(tlv);
-        count++;
+        if(gpio_get(B15) == 0)
+        {
+            gpio_toggle(C1);
+            comm_tlv_t tlv = {.tag = 4, .len = sizeof(count), .value = (uint8*)&count};
+            comm_send(tlv);
+            count++;
+            systick_delay_ms(150);
+        }
     }
 }
