@@ -12,6 +12,7 @@
 #ifndef __COMM_H_
 #define __COMM_H_
 
+/* C++编译器支持 */
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,39 +20,39 @@ extern "C" {
 /* @include */
 #include <stdlib.h>
 
-/* @typedef */
-typedef unsigned char       comm_uint8;
-typedef unsigned short int  comm_uint16;
-typedef unsigned long int   comm_uint32;
-typedef unsigned long long  comm_uint64;
-
-typedef char                comm_int8;
-typedef short int           comm_int16;
-typedef long int            comm_int32;
-typedef long long           comm_int64;
-
-typedef comm_int8           comm_err;
-
 /* @define */
-#ifdef __CC_ARM                             /* ARM Compiler */
-    #define __WEAK                          __weak
-#elif defined (__IAR_SYSTEMS_ICC__)         /* for IAR Compiler */
-    #define __WEAK                          __weak
-#elif defined (__GNUC__)                    /* GNU GCC Compiler */
-    #define __WEAK                          __attribute__((weak))
-#elif defined (__ADSPBLACKFIN__)            /* for VisualDSP++ Compiler */
-    #define __WEAK                          __attribute__((weak))
-#else
-    #error not supported tool chain
-#endif
+
+/****************************************************************************************/
+/*                                  用户配置部分                                         */
+/****************************************************************************************/
 
 /* 内存空间相关接口 */
 #define COMM_MALLOC                 malloc  // 空间申请接口
 #define COMM_FREE                   free    // 空间释放接口
 
-#define COMM_NULL                   NULL    // 空数据定义
+/* 协议空间大小配置 */
+#define COMM_TXFIFO_SIZE            5       // 发送队列大小 （单位：消息数）
+#define COMM_RXBYTEFIFO_SIZE        256     // 接收字节缓冲区大小 （单位：字节）
 
-#define COMM_HEAD_DATA              0x5AA5  // 帧起始数据
+/* 超时时间配置 */
+#define COMM_TX_TIMEOUT             100     // 发送超时时间 （单位：ms）
+#define COMM_RX_TIMEOUT             100     // 接收超时时间 （单位：ms）
+
+/* 最大发送次数 */
+#define COMM_TX_REPEAT              5       // 最大发送次数
+
+/****************************************************************************************/
+
+/* 协议保留TAG 用户不可用 */
+#define COMM_TAG_ACK                0       // 响应帧
+#define COMM_TAG_REQUEST            1       // 请求帧
+#define COMM_TAG_JOIN               2       // 加入帧
+#define COMM_TAG_HB                 3       // 心跳帧
+
+/* 响应错误类型 */
+#define COMM_ACK_ERR_SUCCESS        0       // 成功应答
+#define COMM_ACK_ERR_CRC            1       // CRC校验错误应答
+#define COMM_ACK_ERR_TIMEOUT        2       // 接收超时应答
 
 /* 错误码 */
 #define COMM_ERR_UNKNOW             -1      // 未知错误
@@ -67,28 +68,36 @@ typedef comm_int8           comm_err;
 #define COMM_STATE_STOP             1       // 停止状态
 #define COMM_STATE_READY            2       // 就绪状态
 
-/* 协议空间大小配置 */
-#define COMM_TXFIFO_SIZE            5       // 发送队列大小 （单位：消息数）
-#define COMM_RXFIFO_SIZE            5       // 接收队列大小 （单位：消息数）
-#define COMM_RXBYTEFIFO_SIZE        256     // 接收字节缓冲区大小 （单位：字节）
+/* 数据定义 */
+#define COMM_NULL                   NULL    // 空数据定义
 
-/* 超时时间配置 */
-#define COMM_TX_TIMEOUT             100     // 发送超时时间 （单位：ms）
-#define COMM_RX_TIMEOUT             100     // 接收超时时间 （单位：ms）
+#define COMM_HEAD_DATA              0x5AA5  // 帧起始数据
 
-/* 最大发送次数 */
-#define COMM_TX_REPEAT              5       // 最大发送次数
+/* __WEAK定义 */
+#ifdef __CC_ARM                             /* ARM Compiler */
+    #define __WEAK                          __weak
+#elif defined (__IAR_SYSTEMS_ICC__)         /* for IAR Compiler */
+    #define __WEAK                          __weak
+#elif defined (__GNUC__)                    /* GNU GCC Compiler */
+    #define __WEAK                          __attribute__((weak))
+#elif defined (__ADSPBLACKFIN__)            /* for VisualDSP++ Compiler */
+    #define __WEAK                          __attribute__((weak))
+#else
+    #error not supported tool chain
+#endif
 
-/* 协议保留TAG 用户不可用 */
-#define COMM_TAG_ACK                0       // 响应帧
-#define COMM_TAG_REQUEST            1       // 请求帧
-#define COMM_TAG_JOIN               2       // 加入帧
-#define COMM_TAG_HB                 3       // 心跳帧
+/* @typedef */
+typedef unsigned char       comm_uint8;
+typedef unsigned short int  comm_uint16;
+typedef unsigned long int   comm_uint32;
+typedef unsigned long long  comm_uint64;
 
-/* 响应错误类型 */
-#define COMM_ACK_ERR_SUCCESS        0       // 成功应答
-#define COMM_ACK_ERR_CRC            1       // CRC校验错误应答
-#define COMM_ACK_ERR_TIMEOUT        2       // 接收超时应答
+typedef char                comm_int8;
+typedef short int           comm_int16;
+typedef long int            comm_int32;
+typedef long long           comm_int64;
+
+typedef comm_int8           comm_err;
 
 /* @struct */
 

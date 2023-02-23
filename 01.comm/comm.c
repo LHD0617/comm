@@ -72,7 +72,6 @@ typedef struct
 {
     comm_uint8 state;               // 协议运行状态
     fifo_cb_t* tx_fifo;             // 发送队列
-    fifo_cb_t* rx_fifo;             // 接收队列
     fifo_cb_t* rx_bytefifo;         // 接收字节缓冲区
     comm_uint32 tx_sn;              // 发送流水编号
     comm_uint64 time;               // 时间戳
@@ -92,7 +91,6 @@ static comm_cb_t comm_cb =  // 协议控制块
 {
     .state = COMM_STATE_INIT,
     .tx_fifo = COMM_NULL,
-    .rx_fifo = COMM_NULL,
     .rx_bytefifo = COMM_NULL,
     .tx_sn = 0,
     .time = 0,
@@ -146,8 +144,6 @@ comm_err comm_start(void)
     {
         comm_cb.tx_fifo = fifo_create(COMM_TXFIFO_SIZE * sizeof(comm_item_t*));
         if(!comm_cb.tx_fifo) goto NOTSPACE;
-        comm_cb.rx_fifo = fifo_create(COMM_RXFIFO_SIZE * sizeof(comm_item_t*));
-        if(!comm_cb.rx_fifo) goto NOTSPACE;
         comm_cb.rx_bytefifo = fifo_create(COMM_RXBYTEFIFO_SIZE);
         if(!comm_cb.rx_bytefifo) goto NOTSPACE;
         comm_cb.callback_list = list_create(sizeof(comm_callback_t));
@@ -161,7 +157,6 @@ comm_err comm_start(void)
 
 NOTSPACE:
     fifo_delete(comm_cb.tx_fifo);
-    fifo_delete(comm_cb.rx_fifo);
     fifo_delete(comm_cb.rx_bytefifo);
     list_delete(comm_cb.callback_list);
     return COMM_ERR_NOTSPACE;
