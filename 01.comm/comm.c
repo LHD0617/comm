@@ -20,7 +20,7 @@
 
 /**
  * @brief tlv结构体
- * 该3结构体定义为线性结构仅作为内部使用
+ * 该结构体定义为线性结构仅作为内部使用
  * 
  */
 typedef struct
@@ -250,9 +250,9 @@ void comm_handle(void)
     {
         if(comm_cb.time - comm_cb.rx_time >= COMM_RX_TIMEOUT)
         {
+            _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_TIMEOUT);
             COMM_FREE(comm_cb.rx_item);
             comm_cb.rx_item = COMM_NULL;
-            _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_TIMEOUT);
         }
         else
         {
