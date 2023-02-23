@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>15</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>285</x>
+      <y>390</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>len
+2 bytes
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>495</x>
+      <y>390</y>
+      <w>825</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>value
+len bytes
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>390</y>
+      <w>105</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>tag
+1 bytes</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
