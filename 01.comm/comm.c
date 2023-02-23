@@ -262,6 +262,7 @@ void comm_handle(void)
             if(err == FIFO_ERROR_SUCCESS)
             {
                 comm_cb.rx_len += len;
+                comm_cb.rx_time = comm_cb.time;
             }
             if(comm_cb.rx_len == comm_cb.rx_item->len)
             {
