@@ -516,6 +516,12 @@ static void _ackCallback(comm_uint16 len, comm_uint8* value)
                 comm_cb.tx_item = COMM_NULL;
                 break;
             }
+            case COMM_ACK_ERR_REPEAT:
+            {
+                COMM_FREE(comm_cb.tx_item);
+                comm_cb.tx_item = COMM_NULL;
+                break;
+            }
             default:
             {
                 COMM_FREE(comm_cb.tx_item);
