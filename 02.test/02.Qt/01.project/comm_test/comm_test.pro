@@ -16,7 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ../../../../01.comm/comm.c \
+    comm.c \
     fifo.c \
     list.c \
     main.cpp \
@@ -25,7 +25,7 @@ SOURCES += \
     systemconfig.cpp
 
 HEADERS += \
-    ../../../../01.comm/comm.h \
+    comm.h \
     fifo.h \
     list.h \
     mainwindow.h \
