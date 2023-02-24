@@ -41,6 +41,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tagLedit->setValidator(new QIntValidator(0, 999, this));
 
     connect(ui->sendPbtn, SIGNAL(clicked()), this, SLOT(sendFrame()));
+    connect(ui->tagLedit, SIGNAL(returnPressed()), ui->sendPbtn, SLOT(click()), Qt::UniqueConnection);
+    connect(ui->tagLedit, SIGNAL(enterPressed()), ui->sendPbtn, SLOT(click()), Qt::UniqueConnection);
+    connect(ui->valueLedit, SIGNAL(returnPressed()), ui->sendPbtn, SLOT(click()), Qt::UniqueConnection);
+    connect(ui->valueLedit, SIGNAL(enterPressed()), ui->sendPbtn, SLOT(click()), Qt::UniqueConnection);
     connect(ui->serialWidget, SIGNAL(LogSignal(QString)), this, SLOT(ShowMessage(QString)));
     connect(ui->serialWidget, SIGNAL(CleanStatsSignal()), this, SLOT(CleanData()));
     connect(&tickTimer, SIGNAL(timeout()), this, SLOT(tick()));
