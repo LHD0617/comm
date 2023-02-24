@@ -23,9 +23,7 @@ QMutex fifo_mutex;
 static QString ByteArrayToHexString(QByteArray ascii);
 static char ConvertCharToHex(char ch);
 static QByteArray HexStringToQByteArray(QString str);
-static void tag4_callback(uint16_t len, uint8_t* value);
-static void tag5_callback(uint16_t len, uint8_t* value);
-static void tag6_callback(uint16_t len, uint8_t* value);
+static void tag_callback(uint16_t len, uint8_t* value);
 
 /**
  * @brief Construct a new Main Window:: Main Window object
@@ -54,9 +52,10 @@ MainWindow::MainWindow(QWidget *parent)
     {
         tickTimer.start(1);
         handleTimer.start(20);
-        comm_register(4, tag4_callback);
-        comm_register(5, tag5_callback);
-        comm_register(6, tag6_callback);
+        for(int i = 4; i < 256; i++)
+        {
+            comm_register(i, tag_callback);
+        }
         ShowMessage("协议启动成功");
     }
     else ShowMessage(QString("协议启动失败 错误码:%1").arg(err));
@@ -176,30 +175,12 @@ comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len)
 }
 
 /**
- * @brief tag4回调函数
+ * @brief 回调函数
  *
  */
-static void tag4_callback(uint16_t len, uint8_t* value)
+static void tag_callback(uint16_t len, uint8_t* value)
 {
-    thispt->ui->commTedit->append("tag4:" + QString::number(*(uint32_t*)value));
-}
-
-/**
- * @brief tag5回调函数
- *
- */
-static void tag5_callback(uint16_t len, uint8_t* value)
-{
-    thispt->ui->commTedit->append("tag5:" + QByteArray((char*)value, len));
-}
-
-/**
- * @brief tag6回调函数
- *
- */
-static void tag6_callback(uint16_t len, uint8_t* value)
-{
-    thispt->ui->commTedit->append("tag6:" + QByteArray((char*)value, len));
+    thispt->ui->commTedit->append(QByteArray((char*)value, len));
 }
 
 /**
