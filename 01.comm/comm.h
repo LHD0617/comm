@@ -53,6 +53,7 @@ extern "C" {
 #define COMM_ACK_ERR_SUCCESS        0       // 成功应答
 #define COMM_ACK_ERR_CRC            1       // CRC校验错误应答
 #define COMM_ACK_ERR_TIMEOUT        2       // 接收超时应答
+#define COMM_ACK_ERR_REPEAT         3       // 重复接收
 
 /* 错误码 */
 #define COMM_ERR_UNKNOW             -1      // 未知错误

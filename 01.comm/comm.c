@@ -74,6 +74,7 @@ typedef struct
     fifo_cb_t* tx_fifo;             // 发送队列
     fifo_cb_t* rx_bytefifo;         // 接收字节缓冲区
     comm_uint32 tx_sn;              // 发送流水编号
+    comm_uint32 rx_sn;              // 上次接收流水编号
     comm_uint64 time;               // 时间戳
     comm_uint64 tx_time;            // 发送时间戳
     comm_uint64 rx_time;            // 接收时间戳
@@ -93,6 +94,7 @@ static comm_cb_t comm_cb =  // 协议控制块
     .tx_fifo = COMM_NULL,
     .rx_bytefifo = COMM_NULL,
     .tx_sn = 0,
+    .rx_sn = 0xffffffff,
     .time = 0,
     .tx_time = 0,
     .rx_time = 0,
@@ -265,24 +267,64 @@ void comm_handle(void)
                 {
                     if(comm_cb.rx_item->tlv->tag != COMM_TAG_ACK)
                     {
-                        _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_SUCCESS);
-                    }
-                    comm_callback_t callback;
-                    for(comm_uint32 i = 0; i < list_count(comm_cb.callback_list); i++)
-                    {
-                        if(!list_query(comm_cb.callback_list, i, &callback))
+                        if(comm_cb.rx_item->sn == comm_cb.rx_sn)
                         {
-                            if(callback.tag == comm_cb.rx_item->tlv->tag)
+                            _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_REPEAT);
+                        }
+                        else
+                        {
+                            _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_SUCCESS);
+                            comm_cb.rx_sn = comm_cb.rx_item->sn;
+                            comm_callback_t callback;
+                            for(comm_uint32 i = 0; i < list_count(comm_cb.callback_list); i++)
                             {
-                                callback.callback(comm_cb.rx_item->tlv->len, comm_cb.rx_item->tlv->value);
-                                break;
+                                if(!list_query(comm_cb.callback_list, i, &callback))
+                                {
+                                    if(callback.tag == comm_cb.rx_item->tlv->tag)
+                                    {
+                                        callback.callback(comm_cb.rx_item->tlv->len, comm_cb.rx_item->tlv->value);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        comm_callback_t callback;
+                        for(comm_uint32 i = 0; i < list_count(comm_cb.callback_list); i++)
+                        {
+                            if(!list_query(comm_cb.callback_list, i, &callback))
+                            {
+                                if(callback.tag == COMM_TAG_ACK)
+                                {
+                                    callback.callback(comm_cb.rx_item->tlv->len, comm_cb.rx_item->tlv->value);
+                                    break;
+                                }
                             }
                         }
                     }
                 }
                 else
                 {
-                    _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_CRC);
+                    if(comm_cb.rx_item->tlv->tag != COMM_TAG_ACK)
+                    {
+                        _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_CRC);
+                    }
+                    else
+                    {
+                        if(comm_cb.repeat >= COMM_TX_REPEAT)
+                        {
+                            COMM_FREE(comm_cb.tx_item);
+                            comm_cb.tx_item = COMM_NULL;
+                        }
+                        else
+                        {
+                            _sendFrame(comm_cb.tx_item);
+                            comm_cb.tx_time = comm_cb.time;
+                            comm_cb.repeat++;
+                        }
+                    }
                 }
                 COMM_FREE(comm_cb.rx_item);
                 comm_cb.rx_item = COMM_NULL;
