@@ -68,7 +68,6 @@ extern "C" {
 /* 协议运行状态*/
 #define COMM_STATE_INIT             0       // 初始状态
 #define COMM_STATE_READY            1       // 就绪状态
-#define COMM_STATE_HANDLE           2       // 处理状态
 
 /* 数据定义 */
 #define COMM_NULL                   NULL    // 空数据定义
