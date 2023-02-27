@@ -32,7 +32,7 @@ extern "C" {
 
 /* 协议空间大小配置 */
 #define COMM_TXFIFO_SIZE            5       // 发送队列大小 （单位：消息数）
-#define COMM_RXBYTEFIFO_SIZE        23000   // 接收字节缓冲区大小 （单位：字节）
+#define COMM_RXBYTEFIFO_SIZE        256     // 接收字节缓冲区大小 （单位：字节）
 
 /* 超时时间配置 */
 #define COMM_TX_TIMEOUT             100     // 发送超时时间 （单位：ms）
@@ -63,11 +63,12 @@ extern "C" {
 #define COMM_ERR_DATAERROR          3       // 数据错误
 #define COMM_ERR_NOTSTART           4       // 协议未启动
 #define COMM_ERR_FIFOFULL           5       // 队列已满
+#define COMM_ERR_HANDLE             6       // 正在处理
 
 /* 协议运行状态*/
 #define COMM_STATE_INIT             0       // 初始状态
-#define COMM_STATE_STOP             1       // 停止状态
-#define COMM_STATE_READY            2       // 就绪状态
+#define COMM_STATE_READY            1       // 就绪状态
+#define COMM_STATE_HANDLE           2       // 处理状态
 
 /* 数据定义 */
 #define COMM_NULL                   NULL    // 空数据定义

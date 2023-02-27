@@ -423,6 +423,7 @@ comm_err comm_register(comm_uint8 tag, void (*callback)(comm_uint16 len, comm_ui
  */
 static comm_err _sendFrame(comm_item_t* item)
 {
+    if(!item) return COMM_ERR_DATAERROR;
     if(comm_putBuf((comm_uint8*)item, sizeof(comm_item_t) + sizeof(_comm_tlv_t) + item->tlv->len) == COMM_ERR_SUCCESS)
         return COMM_ERR_SUCCESS;
     else

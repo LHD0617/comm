@@ -142,9 +142,9 @@ void MainWindow::tick()
  */
 void MainWindow::handle()
 {
-    fifo_mutex.lock();
+//    fifo_mutex.lock();
     comm_handle();
-    fifo_mutex.unlock();
+//    fifo_mutex.unlock();
 }
 
 /**
@@ -153,11 +153,11 @@ void MainWindow::handle()
  */
 void MainWindow::ReceiveSerialData()
 {
-    fifo_mutex.lock();
+//    fifo_mutex.lock();
     QByteArray dat = SerialReadData();
     comm_getBuf((comm_uint8*)dat.data(), dat.length());
     ui->dataRxTedit->append(ByteArrayToHexString(dat));
-    fifo_mutex.unlock();
+//    fifo_mutex.unlock();
 }
 
 /**
