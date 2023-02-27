@@ -12,9 +12,10 @@
 /* @include */
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "../../../../01.comm/comm.h"
+#include "comm.h"
 #include <QIntValidator>
 #include <QMutex>
+#include <QDebug>
 
 static MainWindow* thispt;
 QMutex fifo_mutex;

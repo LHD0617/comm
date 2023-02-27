@@ -258,7 +258,7 @@ void comm_handle(void)
             comm_cb.state = COMM_STATE_HANDLE;
             comm_uint32 len = fifo_getUsed(comm_cb.rx_bytefifo);
             if(comm_cb.rx_len + len > comm_cb.rx_item->len) len = comm_cb.rx_item->len - comm_cb.rx_len;
-            fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)(comm_cb.rx_item->tlv + comm_cb.rx_len), len);
+            fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)(comm_cb.rx_item->tlv) + comm_cb.rx_len, len);
             comm_cb.state = COMM_STATE_READY;
             if(err == FIFO_ERROR_SUCCESS)
             {

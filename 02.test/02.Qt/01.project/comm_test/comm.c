@@ -258,7 +258,7 @@ void comm_handle(void)
             comm_cb.state = COMM_STATE_HANDLE;
             comm_uint32 len = fifo_getUsed(comm_cb.rx_bytefifo);
             if(comm_cb.rx_len + len > comm_cb.rx_item->len) len = comm_cb.rx_item->len - comm_cb.rx_len;
-            fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)(comm_cb.rx_item->tlv + comm_cb.rx_len), len);
+            fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)(comm_cb.rx_item->tlv) + comm_cb.rx_len, len);
             comm_cb.state = COMM_STATE_READY;
             if(err == FIFO_ERROR_SUCCESS)
             {
@@ -423,6 +423,7 @@ comm_err comm_register(comm_uint8 tag, void (*callback)(comm_uint16 len, comm_ui
  */
 static comm_err _sendFrame(comm_item_t* item)
 {
+    if(!item) return COMM_ERR_DATAERROR;
     if(comm_putBuf((comm_uint8*)item, sizeof(comm_item_t) + sizeof(_comm_tlv_t) + item->tlv->len) == COMM_ERR_SUCCESS)
         return COMM_ERR_SUCCESS;
     else
