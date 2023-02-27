@@ -354,7 +354,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\01.comm\comm.c</PathWithFileName>
+      <PathWithFileName>..\CODE\comm.c</PathWithFileName>
       <FilenameWithoutPath>comm.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -366,7 +366,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\01.comm\comm.h</PathWithFileName>
+      <PathWithFileName>..\CODE\comm.h</PathWithFileName>
       <FilenameWithoutPath>comm.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\CODE;..\USER\src;..\USER\inc;..\..\Libraries\seekfree_libraries\common;..\..\\Libraries\seekfree_libraries\board;..\..\Libraries\seekfree_libraries\system;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\..\Libraries\Device\CMSIS\KEIL_Core;..\..\Libraries\Device\MM32SPIN2xx_p\Include;..\..\Libraries\Device\MM32SPIN2xx_p\HAL_Lib\Inc;..\..\..\..\01.comm</IncludePath>
+              <IncludePath>..\CODE;..\USER\src;..\USER\inc;..\..\Libraries\seekfree_libraries\common;..\..\\Libraries\seekfree_libraries\board;..\..\Libraries\seekfree_libraries\system;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\..\Libraries\Device\CMSIS\KEIL_Core;..\..\Libraries\Device\MM32SPIN2xx_p\Include;..\..\Libraries\Device\MM32SPIN2xx_p\HAL_Lib\Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -436,12 +436,12 @@
             <File>
               <FileName>comm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\01.comm\comm.c</FilePath>
+              <FilePath>..\CODE\comm.c</FilePath>
             </File>
             <File>
               <FileName>comm.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\01.comm\comm.h</FilePath>
+              <FilePath>..\CODE\comm.h</FilePath>
             </File>
           </Files>
         </Group>
