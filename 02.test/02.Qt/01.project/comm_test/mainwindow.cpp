@@ -18,6 +18,7 @@
 
 static MainWindow* thispt;
 QMutex fifo_mutex;
+QTimer autoTimer;
 
 /* @Function declarations */
 static QString ByteArrayToHexString(QByteArray ascii);
@@ -42,13 +43,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->sendPbtn, SIGNAL(clicked()), this, SLOT(sendFrame()));
     connect(ui->tagLedit, SIGNAL(returnPressed()), ui->sendPbtn, SLOT(click()), Qt::UniqueConnection);
-    connect(ui->tagLedit, SIGNAL(enterPressed()), ui->sendPbtn, SLOT(click()), Qt::UniqueConnection);
     connect(ui->valueLedit, SIGNAL(returnPressed()), ui->sendPbtn, SLOT(click()), Qt::UniqueConnection);
-    connect(ui->valueLedit, SIGNAL(enterPressed()), ui->sendPbtn, SLOT(click()), Qt::UniqueConnection);
     connect(ui->serialWidget, SIGNAL(LogSignal(QString)), this, SLOT(ShowMessage(QString)));
     connect(ui->serialWidget, SIGNAL(CleanStatsSignal()), this, SLOT(CleanData()));
     connect(&tickTimer, SIGNAL(timeout()), this, SLOT(tick()));
     connect(&handleTimer, SIGNAL(timeout()), this, SLOT(handle()));
+    connect(&autoTimer, SIGNAL(timeout()), this, SLOT(sendFrame()));
     connect(SerialGetPt(), SIGNAL(readyRead()), this, SLOT(ReceiveSerialData()));
 
     comm_err err = comm_start();
@@ -56,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     {
         tickTimer.start(1);
         handleTimer.start(20);
+        autoTimer.start(100);
         for(int i = 4; i < 256; i++)
         {
             comm_register(i, tag_callback);

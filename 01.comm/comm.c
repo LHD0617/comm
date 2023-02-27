@@ -225,7 +225,9 @@ void comm_handle(void)
     if(!comm_cb.rx_item)
     {
         comm_item_t item;
+        comm_cb.state = COMM_STATE_HANDLE;
         fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)&item, sizeof(comm_item_t));
+        comm_cb.state = COMM_STATE_READY;
         if(err == FIFO_ERROR_SUCCESS)
         {
             if(item.head == COMM_HEAD_DATA && item.hcrc == _crc8(&item.dcrc, (comm_uint8*)item.tlv - &item.dcrc))
@@ -253,9 +255,11 @@ void comm_handle(void)
         }
         else
         {
+            comm_cb.state = COMM_STATE_HANDLE;
             comm_uint32 len = fifo_getUsed(comm_cb.rx_bytefifo);
             if(comm_cb.rx_len + len > comm_cb.rx_item->len) len = comm_cb.rx_item->len - comm_cb.rx_len;
             fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)(comm_cb.rx_item->tlv + comm_cb.rx_len), len);
+            comm_cb.state = COMM_STATE_READY;
             if(err == FIFO_ERROR_SUCCESS)
             {
                 comm_cb.rx_len += len;
@@ -353,13 +357,10 @@ __WEAK comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len)
 comm_err comm_getByte(comm_uint8 byte)
 {
     if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
+    if(comm_cb.state == COMM_STATE_HANDLE) return COMM_ERR_HANDLE;
     fifo_err err = fifo_pushByte(comm_cb.rx_bytefifo, byte);
     if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
-    else
-    {
-        if(err == FIFO_ERROR_NOTSPACE) return COMM_ERR_FIFOFULL;
-        return COMM_ERR_UNKNOW;
-    }
+    else return COMM_ERR_UNKNOW;
 }
 
 /**
@@ -372,13 +373,10 @@ comm_err comm_getByte(comm_uint8 byte)
 comm_err comm_getBuf(comm_uint8* buf, comm_uint32 len)
 {
     if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
+    if(comm_cb.state == COMM_STATE_HANDLE) return COMM_ERR_HANDLE;
     fifo_err err = fifo_pushBuf(comm_cb.rx_bytefifo, buf, len);
     if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
-    else
-    {
-        if(err == FIFO_ERROR_NOTSPACE) return COMM_ERR_FIFOFULL;
-        return COMM_ERR_UNKNOW;
-    }
+    else return COMM_ERR_UNKNOW;
 }
 
 /**

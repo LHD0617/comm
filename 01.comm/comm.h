@@ -63,11 +63,12 @@ extern "C" {
 #define COMM_ERR_DATAERROR          3       // 数据错误
 #define COMM_ERR_NOTSTART           4       // 协议未启动
 #define COMM_ERR_FIFOFULL           5       // 队列已满
+#define COMM_ERR_HANDLE             6       // 正在处理
 
 /* 协议运行状态*/
 #define COMM_STATE_INIT             0       // 初始状态
-#define COMM_STATE_STOP             1       // 停止状态
-#define COMM_STATE_READY            2       // 就绪状态
+#define COMM_STATE_READY            1       // 就绪状态
+#define COMM_STATE_HANDLE           2       // 处理状态
 
 /* 数据定义 */
 #define COMM_NULL                   NULL    // 空数据定义
