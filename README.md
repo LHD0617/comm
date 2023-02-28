@@ -108,13 +108,15 @@ comm_err comm_start(void)
  * @brief 发送数据
  * 
  * @param tlv 数据tlv
- * @return comm_err 
+ * @param dcrc 是否crc
+ * @param ack 是否应答
+ * @return comm_err 错误码
  */
-comm_err comm_send(comm_tlv_t tlv)
+comm_err comm_send(comm_tlv_t tlv, comm_uint8 dcrc, comm_uint8 ack)
 ```
 > 发送数据函数
 
-> 参数：tlv 数据tlv
+> 参数：tlv 数据tlv dcrc 是否crc ack 是否应答
 
 > 返回值：错误码
 

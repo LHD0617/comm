@@ -169,7 +169,9 @@ NOTSPACE:
  * @brief 发送数据
  * 
  * @param tlv 数据tlv
- * @return comm_err 
+ * @param dcrc 是否crc
+ * @param ack 是否应答
+ * @return comm_err 错误码
  */
 comm_err comm_send(comm_tlv_t tlv, comm_uint8 dcrc, comm_uint8 ack)
 {
