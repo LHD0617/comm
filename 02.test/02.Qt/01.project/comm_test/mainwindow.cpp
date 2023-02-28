@@ -56,8 +56,8 @@ MainWindow::MainWindow(QWidget *parent)
     if(err == COMM_ERR_SUCCESS)
     {
         tickTimer.start(1);
-        handleTimer.start(20);
-        autoTimer.start(100);
+        handleTimer.start(5);
+//        autoTimer.start(100);
         for(int i = 4; i < 256; i++)
         {
             comm_register(i, tag_callback);
