@@ -32,11 +32,11 @@ extern "C" {
 
 /* 协议空间大小配置 */
 #define COMM_TXFIFO_SIZE            5       // 发送队列大小 （单位：消息数）
-#define COMM_RXBYTEFIFO_SIZE        10240   // 接收字节缓冲区大小 （单位：字节）
+#define COMM_RXBYTEFIFO_SIZE        256     // 接收字节缓冲区大小 （单位：字节）
 
 /* 超时时间配置 */
-#define COMM_TX_TIMEOUT             500     // 发送超时时间 （单位：ms）
-#define COMM_RX_TIMEOUT             200     // 接收超时时间 （单位：ms）
+#define COMM_TX_TIMEOUT             100     // 发送超时时间 （单位：ms）
+#define COMM_RX_TIMEOUT             100     // 接收超时时间 （单位：ms）
 
 /* 最大发送次数 */
 #define COMM_TX_REPEAT              5       // 最大发送次数
@@ -69,10 +69,17 @@ extern "C" {
 #define COMM_STATE_INIT             0       // 初始状态
 #define COMM_STATE_READY            1       // 就绪状态
 
+/* ctrl位描述 */
+#define COMM_CTRL_DCRC              7       // 数据CRC使能位
+#define COMM_CTRL_ACK               6       // 应答使能位
+
 /* 数据定义 */
 #define COMM_NULL                   NULL    // 空数据定义
 
-#define COMM_HEAD_DATA              0x5AA5  // 帧起始数据
+#define COMM_HEAD_DATA              0x5A    // 帧起始数据
+
+#define COMM_TRUE                   1
+#define COMM_FALSE                  0
 
 /* __WEAK定义 */
 #ifdef __CC_ARM                             /* ARM Compiler */
@@ -115,7 +122,7 @@ typedef struct
 
 /* @Function declarations */
 comm_err comm_start(void);
-comm_err comm_send(comm_tlv_t tlv);
+comm_err comm_send(comm_tlv_t tlv, comm_uint8 dcrc, comm_uint8 ack);
 void comm_handle(void);
 comm_err comm_putBuf(comm_uint8* buf, comm_uint32 len);
 comm_err comm_getByte(comm_uint8 byte);

@@ -109,7 +109,14 @@ void MainWindow::sendFrame()
         tlv.len = dat.length();
         tlv.value = (comm_uint8*)dat.data();
         count++;
-        comm_send(tlv);
+        if(tlv.tag == 4)
+            comm_send(tlv, COMM_FALSE, COMM_FALSE);
+        else if(tlv.tag == 5)
+            comm_send(tlv, COMM_FALSE, COMM_TRUE);
+        else if(tlv.tag == 8)
+            comm_send(tlv, COMM_TRUE, COMM_FALSE);
+        else
+            comm_send(tlv, COMM_TRUE, COMM_TRUE);
     }
     else
     {

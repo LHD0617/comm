@@ -36,8 +36,9 @@ typedef struct
  */
 typedef struct
 {
-    comm_uint16 head;               // 起始标识
+    comm_uint8 head;                // 起始标识
     comm_uint8 hcrc;                // 帧头校验
+    comm_uint8 ctrl;                // 控制位
     comm_uint8 dcrc;                // 数据校验
     comm_uint32 sn;                 // 帧流水编号
     comm_uint32 len;                // 数据长度
@@ -170,7 +171,7 @@ NOTSPACE:
  * @param tlv 数据tlv
  * @return comm_err 
  */
-comm_err comm_send(comm_tlv_t tlv)
+comm_err comm_send(comm_tlv_t tlv, comm_uint8 dcrc, comm_uint8 ack)
 {
     if(comm_cb.state == COMM_STATE_INIT) return COMM_ERR_NOTSTART;
     if(!(fifo_getAvailable(comm_cb.tx_fifo) >= sizeof(comm_item_t*))) return COMM_ERR_FIFOFULL;
@@ -181,8 +182,12 @@ comm_err comm_send(comm_tlv_t tlv)
     item->tlv->tag = tlv.tag;
     item->len = sizeof(_comm_tlv_t) + tlv.len;
     item->sn = comm_cb.tx_sn++;
-    item->dcrc = _crc8((comm_uint8*)&item->tlv, item->len);
-    item->hcrc = _crc8(&item->dcrc, (comm_uint8*)item->tlv - &item->dcrc);
+    if(dcrc)item->dcrc = _crc8((comm_uint8*)&item->tlv, item->len);
+    else item->dcrc = 0x00;
+    item->ctrl = 0x00;
+    if(ack) item->ctrl |= 0x01 << COMM_CTRL_ACK;
+    if(dcrc) item->ctrl |= 0x01 << COMM_CTRL_DCRC;
+    item->hcrc = _crc8(&item->ctrl, (comm_uint8*)item->tlv - &item->ctrl);
     item->head = COMM_HEAD_DATA;
     fifo_err err = fifo_pushBuf(comm_cb.tx_fifo, (comm_uint8*)&item, sizeof(item));
     if(err == FIFO_ERROR_SUCCESS) return COMM_ERR_SUCCESS;
@@ -203,8 +208,16 @@ void comm_handle(void)
         if(err == FIFO_ERROR_SUCCESS)
         {
             _sendFrame(comm_cb.tx_item);
-            comm_cb.tx_time = comm_cb.time;
-            comm_cb.repeat = 1;
+            if(comm_cb.tx_item->ctrl & 0x01 << COMM_CTRL_ACK)
+            {
+                comm_cb.tx_time = comm_cb.time;
+                comm_cb.repeat = 1;
+            }
+            else
+            {
+                COMM_FREE(comm_cb.tx_item);
+                comm_cb.tx_item = COMM_NULL;
+            }
         }
     }
     else
@@ -228,7 +241,7 @@ void comm_handle(void)
         fifo_err err = fifo_popBuf(comm_cb.rx_bytefifo, (comm_uint8*)&item, sizeof(comm_item_t));
         if(err == FIFO_ERROR_SUCCESS)
         {
-            if(item.head == COMM_HEAD_DATA && item.hcrc == _crc8(&item.dcrc, (comm_uint8*)item.tlv - &item.dcrc))
+            if(item.head == COMM_HEAD_DATA && item.hcrc == _crc8(&item.ctrl, (comm_uint8*)item.tlv - &item.ctrl))
             {
                 comm_cb.rx_item = (comm_item_t*)COMM_MALLOC(sizeof(comm_item_t) + item.len);
                 if(comm_cb.rx_item) *comm_cb.rx_item = item;
@@ -247,7 +260,7 @@ void comm_handle(void)
     {
         if(comm_cb.time - comm_cb.rx_time >= COMM_RX_TIMEOUT)
         {
-            _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_TIMEOUT);
+            if(comm_cb.rx_item->ctrl & 0x01 << COMM_CTRL_ACK) _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_TIMEOUT);
             COMM_FREE(comm_cb.rx_item);
             comm_cb.rx_item = COMM_NULL;
         }
@@ -263,17 +276,17 @@ void comm_handle(void)
             }
             if(comm_cb.rx_len == comm_cb.rx_item->len)
             {
-                if(comm_cb.rx_item->dcrc == _crc8((comm_uint8*)comm_cb.rx_item->tlv, comm_cb.rx_item->len))
+                if(comm_cb.rx_item->ctrl & 0x01 << COMM_CTRL_DCRC)
                 {
-                    if(comm_cb.rx_item->tlv->tag != COMM_TAG_ACK)
+                    if(comm_cb.rx_item->dcrc == _crc8((comm_uint8*)comm_cb.rx_item->tlv, comm_cb.rx_item->len))
                     {
                         if(comm_cb.rx_item->sn == comm_cb.rx_sn)
                         {
-                            _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_REPEAT);
+                            if(comm_cb.rx_item->ctrl & 0x01 << COMM_CTRL_ACK) _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_REPEAT);
                         }
                         else
                         {
-                            _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_SUCCESS);
+                            if(comm_cb.rx_item->ctrl & 0x01 << COMM_CTRL_ACK) _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_SUCCESS);
                             comm_cb.rx_sn = comm_cb.rx_item->sn;
                             comm_callback_t callback;
                             for(comm_uint32 i = 0; i < list_count(comm_cb.callback_list); i++)
@@ -291,38 +304,47 @@ void comm_handle(void)
                     }
                     else
                     {
-                        comm_callback_t callback;
-                        for(comm_uint32 i = 0; i < list_count(comm_cb.callback_list); i++)
+                        if(comm_cb.rx_item->tlv->tag != COMM_TAG_ACK)
                         {
-                            if(!list_query(comm_cb.callback_list, i, &callback))
+                            if(comm_cb.rx_item->ctrl & 0x01 << COMM_CTRL_ACK) _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_CRC);
+                        }
+                        else
+                        {
+                            if(comm_cb.repeat >= COMM_TX_REPEAT)
                             {
-                                if(callback.tag == COMM_TAG_ACK)
-                                {
-                                    callback.callback(comm_cb.rx_item->tlv->len, comm_cb.rx_item->tlv->value);
-                                    break;
-                                }
+                                COMM_FREE(comm_cb.tx_item);
+                                comm_cb.tx_item = COMM_NULL;
+                            }
+                            else
+                            {
+                                _sendFrame(comm_cb.tx_item);
+                                comm_cb.tx_time = comm_cb.time;
+                                comm_cb.repeat++;
                             }
                         }
                     }
                 }
                 else
                 {
-                    if(comm_cb.rx_item->tlv->tag != COMM_TAG_ACK)
+                    if(comm_cb.rx_item->sn == comm_cb.rx_sn)
                     {
-                        _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_CRC);
+                        if(comm_cb.rx_item->ctrl & 0x01 << COMM_CTRL_ACK) _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_REPEAT);
                     }
                     else
                     {
-                        if(comm_cb.repeat >= COMM_TX_REPEAT)
+                        if(comm_cb.rx_item->ctrl & 0x01 << COMM_CTRL_ACK) _sendAck(comm_cb.rx_item->sn, COMM_ACK_ERR_SUCCESS);
+                        comm_cb.rx_sn = comm_cb.rx_item->sn;
+                        comm_callback_t callback;
+                        for(comm_uint32 i = 0; i < list_count(comm_cb.callback_list); i++)
                         {
-                            COMM_FREE(comm_cb.tx_item);
-                            comm_cb.tx_item = COMM_NULL;
-                        }
-                        else
-                        {
-                            _sendFrame(comm_cb.tx_item);
-                            comm_cb.tx_time = comm_cb.time;
-                            comm_cb.repeat++;
+                            if(!list_query(comm_cb.callback_list, i, &callback))
+                            {
+                                if(callback.tag == comm_cb.rx_item->tlv->tag)
+                                {
+                                    callback.callback(comm_cb.rx_item->tlv->len, comm_cb.rx_item->tlv->value);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -443,7 +465,9 @@ static comm_err _sendAck(comm_uint32 sn, comm_uint8 err)
     item->len = sizeof(_comm_tlv_t) + item->tlv->len;
     item->sn = comm_cb.tx_sn++;
     item->dcrc = _crc8((comm_uint8*)&item->tlv, item->len);
-    item->hcrc = _crc8(&item->dcrc, (comm_uint8*)item->tlv - &item->dcrc);
+    item->ctrl = 0x00;
+    item->ctrl |= 0x01 << COMM_CTRL_DCRC;
+    item->hcrc = _crc8(&item->ctrl, (comm_uint8*)item->tlv - &item->ctrl);
     item->head = COMM_HEAD_DATA;
     comm_err temp = _sendFrame(item);
     COMM_FREE(item);
